@@ -1,0 +1,31 @@
+version: "1.0"
+stages:
+    - "clone"
+    - "build"
+    - "deploy"
+steps:
+    main_clone:
+        type: "git-clone"
+        description: "Cloning main repository..."
+        repo: "${{CF_REPO_OWNER}}/${{CF_REPO_NAME}}"
+        revision: "${{CF_REVISION}}"
+        stage: "clone"
+    build:
+        title: "Building Docker Image"
+        type: "build"
+        image_name: "wohlig-framework"
+        tag: "${{CF_BRANCH}}"
+        dockerfile: "Dockerfile"
+        stage: "build"
+        registry: "${{ecr}}"
+    deploy:
+        title: Running Deploy Script
+        type: deploy
+        kind: kubernetes
+        cluster: UproseFinmart
+        namespace: production
+        service: wohlig-framework
+        candidate:
+            image: "${{build}}"
+            registry: uprose-ecr
+        stage: "deploy"
