@@ -6,107 +6,125 @@ export default {
     debitWallet: (data, callback) => {
         var rate
         var m = moment()
-        console.log("debit request-----", m, data)
+        // console.log("IN MODELLLLLL ::::: ", m, data)
+        
         function getDiff(val) {
-            console.log("Debsit::::", val, "=========", moment().diff(m, "ms"))
+            console.log("getDiff ::::: ", val, "=====", moment().diff(m, "ms"))
         }
 
-        // var transactionData = {};
         var currentBalance = 0
         async.waterfall(
             [
                 (callback) => {
-                    getDiff("1st waterfall start")
+                    /* 
+                        Check if session id exists or not for a particular user
+                    */
+                   getDiff("Waterfall 1---->>")
+                   // console.log("Waterfall 1---->>", data)
                     SessionsModel.sessionExists(data, callback)
                 },
                 (arg, callback) => {
-                    getDiff("2.time taken for sessionExists")
-                    console.log("Waterfall 2---->>", arg)
-                    // if (arg.status == "OK") {
-                    data.url = arg.url ? arg.url : ""
+                    /* 
+                        Check if transaction exists or not for a particular user
+                    */
+                    getDiff("Time taken for sessionExists")
+                    // console.log("Waterfall 2---->>", arg)s
+                    if (arg.status == "OK") {
+                        data.url = (arg.url) ? arg.url : "";
 
-                    TransactionsModel.txExists(data, (err, txData) => {
-                        getDiff("3.Check for transaction exists")
-                        console.log("TxData----->>", txData)
-                        if (err) {
-                            var responseData = {}
-                            responseData.status = "UNKNOWN_ERROR"
-                            callback(err, responseData)
-                        } else {
-                            if (_.isEmpty(txData)) callback(null, arg)
-                            else {
-                                var responseData = {}
-                                responseData.status = "BET_ALREADY_EXIST"
-                                callback("BET_ALREADY_EXIST", responseData)
-                            }
-                        }
-                    })
-                    // } else {
-                    //     // console.log("inside else");
-                    //     callback("error", arg)
-                    // }
-                },
-                (arg1, callback) => {
-                    console.log("Waterfall 3---->>", arg1)
-                    // NetExposure.GetNetExpoByuser(data, (err, exposure) => {
-                    // if (err) {
-                    //     callback(err)
-                    // } else {
-                    // console.log("Exposure---------", exposure);
-                    let options = {
-                        method: "POST",
-                        url: "http://localhost:1339/Api/Racebook/getBalance",
-                        // url: arg1.url + "AR/getBalance",
-                        body: {
-                            id: data.userId ? data.userId : "",
-                            netExpo: 250,
-                            // netExpo: exposure.amount ? exposure.amount : 0,
-                            betInfo: data ? data : ""
-                        },
-                        json: true
-                    }
-                    request(options, (error, response, body) => {
-                        getDiff("4.Get CurrentBalnce from kings")
-                        // console.log("current balance",body)
-                        if (error) {
-                            var responseData = {}
-                            responseData.status = "UNKNOWN_ERROR"
-                            callback(null, responseData)
-                        } else {
-                            if (
-                                body &&
-                                body.data &&
-                                body.data.balance &&
-                                body.data.rate
-                            ) {
-                                currentBalance = body.data.balance
-                                if (
-                                    body.data.balance * body.data.rate >=
-                                    data.transaction.amount
-                                ) {
-                                    callback(null, arg1)
-                                } else {
-                                    var responseData = {}
-                                    responseData.status = "UNKNOWN_ERROR"
-                                    callback(responseData)
-                                }
-                            } else {
-                                console.log(
-                                    "DEBIT:::Empty values from 3rd party GETBalancce",
-                                    body
-                                )
+                        TransactionsModel.txExists(data, (err, txData) => {
+                            getDiff("Time taken for txExists")
+                            // console.log("Time taken for txExists----->>", txData)
+                            if (err) {
                                 var responseData = {}
                                 responseData.status = "UNKNOWN_ERROR"
-                                callback(responseData)
+                                callback(err, responseData)
+                            } else {
+                                if (_.isEmpty(txData)) {
+                                    // Send arg to next waterfall function 
+                                    callback(null, arg)
+                                } else {
+                                    var responseData = {}
+                                    responseData.status = "BET_ALREADY_EXIST"
+                                    callback("BET_ALREADY_EXIST", responseData)
+                                }
                             }
-                        }
-                    })
-                    // }
-                    // })
+                        })
+                    } else {
+                        callback("error", arg)
+                    }
                 },
                 (arg1, callback) => {
-                    // console.log("Waterfall 4---->>", arg1);
-                    // NetExposures
+                    /* 
+                        Call getBalance from kings-user
+                    */
+                    // console.log("Waterfall 3---->>", arg1)
+                    NetExposureModel.GetNetExpoByuser(data, (err, exposure) => {
+                        if (err) {
+                            callback(err)
+                        } else {
+                            // console.log("GetNetExpoByuser ::::: Exposure amt --------->", exposure);
+                            
+                            let options = {
+                                method: "POST",
+                                url: "http://localhost:1339/Api/Racebook/getBalance",
+                                // url: arg1.url + "AR/getBalance",
+                                body: {
+                                    id: data.userId ? data.userId : "",
+                                    netExpo: 250,
+                                    // netExpo: exposure.amount ? exposure.amount : 0,
+                                    betInfo: data ? data : ""
+                                },
+                                json: true
+                            }
+                            request(options, (error, response, body) => {
+                                getDiff("Time taken for getBalance")
+                                console.log("Balance From Kings User ::::: ", body)
+
+                                if (error) {
+                                    var responseData = {}
+                                    responseData.status = "UNKNOWN_ERROR"
+                                    callback(null, responseData)
+                                } else {
+                                    if (
+                                        body &&
+                                        body.data &&
+                                        body.data.balance &&
+                                        body.data.rate
+                                    ) {
+                                        // assign balance value to currentBalance
+                                        currentBalance = body.data.balance
+                                        if (
+                                            body.data.balance * body.data.rate >=
+                                            data.transaction.amount
+                                        ) {
+                                            console.log("IFFFFFF",body.data.balance * body.data.rate);
+                                            console.log("IFFFFFF",data.transaction.amount);
+                                            callback(null, arg1)
+                                        } else {
+                                            console.log("ELSEEEE");
+                                            var responseData = {}
+                                            responseData.status = "UNKNOWN_ERROR"
+                                            callback(responseData)
+                                        }
+                                    } else {
+                                        console.log(
+                                            "DEBIT:::Empty values from 3rd party GETBalancce",
+                                            body
+                                        )
+                                        var responseData = {}
+                                        responseData.status = "UNKNOWN_ERROR"
+                                        callback(responseData)
+                                    }
+                                }
+                            })
+                        }
+                    })
+                },
+                (arg1, callback) => {
+                    // console.log("Waterfall 4 data ---->>", data);
+                    // console.log("Waterfall 4 arg1 ---->>", arg1);
+
                     if (!_.isEmpty(arg1)) {
                         async.parallel(
                             {
@@ -126,7 +144,7 @@ export default {
                                         if (err) {
                                             callback(err)
                                         } else {
-                                            getDiff("5.Saving NetExpo")
+                                            getDiff("Time taken for saveNetExposure")
                                             callback(null, saveData)
                                         }
                                     })
@@ -136,17 +154,17 @@ export default {
                                     data.type = "debit"
                                     data.subGame = data.game.type
                                     data.rate = rate
-                                    var debitTransaction = new Transactions(
+                                    var saveDebitTransaction = new Transactions(
                                         data
                                     )
-                                    debitTransaction.save((err, savedData) => {
+                                    saveDebitTransaction.save((err, savedData) => {
                                         if (err) {
                                             var responseData = {}
                                             responseData.status =
                                                 "UNKNOWN_ERROR"
                                             callback(err, responseData)
                                         } else if (savedData) {
-                                            getDiff("6.Saving Transaction")
+                                            getDiff("Time taken for saveDebitTransaction")
                                             callback(null, "saved")
                                         }
                                     })
@@ -157,66 +175,63 @@ export default {
                     } else {
                         callback(" Invalid Bet ")
                     }
-                }
-                /* (balance, callback) => {
-                    getDiff("TIME FOR ------parallel")
-                    // console.log(
-                    //   "Waterfall 5 Balance---->>bal,cuunetexpo,final",
-                    //   currentBalance,
-                    //   data.transaction.amount,
-                    //   currentBalance - data.transaction.amount
-                    // );
+                },
+                (balance, callback) => {
+                    // console.log("Waterfall 5---->>", currentBalance, data.transaction.amount)
                     var responseData = {}
                     responseData.status = "OK"
-                    responseData.balance =
-                        currentBalance - data.transaction.amount
+                    responseData.balance = parseInt(currentBalance) - parseInt(data.transaction.amount)
                     responseData.uuid = data.uuid
-                    getDiff("7.final balance")
-                    // console.log("responseData", responseData);
+                    
+                    console.log("responseData Finalllllllllllll", responseData);
+                    getDiff("Time taken for send data at final main callback")
+                    
                     callback(null, responseData)
-                } */
+                }
             ],
             (err, result) => {
                 if (err) {
                     // console.log(err);
                     callback(null, err)
                 } else {
-                    console.log("Final-----", moment(), result)
-                    getDiff("8.Final")
-                    /* callback(null, result)
-                    // Balance Socket
-                    // console.log(
-                    //   "Debit socket call time---->>userId",
-                    //   data.userId,
-                    //   data.url
-                    // );
-                    let socketData = {
-                        socketName: "Balance_" + data.userId,
-                        data: {}
-                    }
-                    let userurl = data.url
-                    let socketUrl = userurl.replace("users", "kings-socket")
-                    socketUrl = socketUrl.replace("api/", "callSocket")
-                    // if royal's replace with zodeexchange url
-                    socketUrl = socketUrl.replace(
-                        "royalexch.in",
-                        "zodexchange.com"
-                    )
-                    // console.log("Debit socket call time---->>SocketURl", socketUrl);
+                    console.log("Main Callback Functionnn-----", moment(), result)
+                    getDiff("Main Callback")
+                    callback(null, result)
+                    
+                    if (data && data.url != "") {
+                        console.log("data.url ::::: ", data.url);
 
-                    request.post(
-                        {
-                            headers: {
-                                "content-type": "application/json"
-                            },
-                            url: socketUrl,
-                            body: socketData,
-                            json: true
-                        },
-                        (error, response, body) => {
-                            // console.log("-------debit socket-----");
+                        let socketData = {
+                            socketName: "Balance_" + data.userId,
+                            data: {}
                         }
-                    ) */
+                        let userUrl = data.url
+                        // console.log("1111: userUrl", userUrl);
+                        let socketUrl = userUrl.replace("users", "kings-socket")
+                        // console.log("2222: socketUrl", socketUrl);
+                        socketUrl = socketUrl.replace("api/", "callSocket")
+                        // console.log("3333: socketUrl", socketUrl);
+                        
+                        // if royal's replace with zodeexchange url
+                        socketUrl = socketUrl.replace(
+                            "royalexch.in",
+                            "zodexchange.com"
+                        )
+                        // console.log("4444: socketUrl", socketUrl);
+                        request.post(
+                            {
+                                headers: {
+                                    "content-type": "application/json"
+                                },
+                                url: socketUrl,
+                                body: socketData,
+                                json: true
+                            },
+                            (error, response, body) => {
+                                // console.log("-------debit socket-----");
+                            }
+                        )
+                    }
                 }
             }
         )

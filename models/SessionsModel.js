@@ -1,10 +1,9 @@
 export default {
     /* 
         author: Siddhesh Salunkhe
-        description: 
+        description: Check sessions by session id and status
     */
     sessionExists: function (data, callback) {
-        console.log("sessionExists:::::")
         Sessions.findOne(
             {
                 sessionId: data.sid,
@@ -14,8 +13,10 @@ export default {
                 userId: 1,
                 url: 1
             }
-        ).exec(function (err, found) {
-            console.log("sessionExists::::: <><found><>", found)
+        ).exec( (err, found) => {
+            // console.log("1", found);
+            // console.log("2", found.userId);
+            // console.log("3", data.userId);
             if (err || _.isEmpty(found)) {
                 var responseData = {}
                 responseData.status = "INVALID_SID"
