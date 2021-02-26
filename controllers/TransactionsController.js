@@ -45,4 +45,27 @@ router.post("/credit", (req, res) => {
     }
 })
 
+/* 
+    author: Siddhesh Salunkhe
+    description:
+*/
+router.post("/balance", (req, res) => {
+    req.body.frontendUrl = req.headers.origin;
+    // console.log("Balance Call", req.body);
+    // console.log("Balance Call", req.query);
+    if (
+        req.body &&
+        req.body.userId 
+        // req.query.authToken == global["env"].authToken
+    ) {
+        // console.log("Balance req.body : ", req.body)
+        SessionsModel.balanceWallet(req.body, res.callback);
+    } else {
+        // console.log("Body not set for balance ", req.body)
+        var responseData = {};
+        responseData.status = "INVALID_TOKEN_ID";
+        res.callback(null, responseData);
+    }
+})
+
 export default router
