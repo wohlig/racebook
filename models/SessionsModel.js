@@ -105,6 +105,8 @@ export default {
     },
 
     createLoginSidNew: function (data, callback) {
+        const uuidv1 = require("uuid/v1")
+
         data.url = ConfigModel.getMainServer(data.frontendUrl)
         // console.log("data ::::: ", data)
         // console.log("data.url ::::: ", data.url)
@@ -158,66 +160,75 @@ export default {
             }  else {
                 SessionsModel.checkUser(data, function(err, userData) {
                     if (err) {
-                        var responseData = {};
-                        responseData.status = "INVALID_PARAMETER";
-                        callback(null, responseData);
+                        var responseData = {}
+                        responseData.status = "INVALID_PARAMETER"
+                        callback(null, responseData)
                     } else {
                         if (data.nickname) {
-                            let username = _.split(data.nickname, "_", 2);
+                            let username = _.split(data.nickname, "_", 2)
                             if (!_.isEmpty(username)) {
-                                data.name = username[0];   
+                                data.name = username[0]
                             }
                         }
                         if (userData.currencyType) {
-                            data.currencyType = userData.currencyType;
+                            data.currencyType = userData.currencyType
                         } else {
-                            data.currencyType = "HKD";
+                            data.currencyType = "HKD"
                         }
-                        data.userId = data.userId;
-                        data.sessionId = uuidv1();
-                        data.status = "Active";
+                        data.userId = data.userId
+                        data.sessionId = uuidv1()
+                        data.status = "Active"
                         // data.url = Config.getMainServer(data.frontendUrl);
                         data.domain = data.frontendUrl
                         console.log("%%%%%%%%%%%%%%data%%%%%%%%%%%%%%%", data)
+
                         
-                        Sessions.saveData(data, function(err, savedData) {
-                            console.log("%%%%%%%%%%%%%%savedData%%%%%%%%%%%%%%%", savedData)
+                        // Sessions.saveData(data, function(err, savedData) {
+                        var saveSessionData = new Sessions(data)
+                        saveSessionData.save(function (err, savedData) {
+                            console.log(
+                                "%%%%%%%%%%%%%%savedData%%%%%%%%%%%%%%%",
+                                savedData
+                            )
                             if (err) {
-                                var responseData = {};
-                                responseData.status = "UNKNOWN_ERROR";
-                                callback(null, responseData);
+                                var responseData = {}
+                                responseData.status = "UNKNOWN_ERROR"
+                                callback(null, responseData)
                             } else {
-                                var currency = "HKD";
+                                var currency = "HKD"
                                 if (
                                     global["env"].arCurrencyPoints &&
                                     global["env"].arCurrencyInr &&
                                     global["env"].arCurrencyOther
                                 ) {
                                     if (!data.currencyType) {
-                                        currency = global["env"].arCurrencyOther; //currency to be given to 3rd party
+                                        currency = global["env"].arCurrencyOther //currency to be given to 3rd party
                                     } else {
                                         // for points user
                                         if (data.currencyType == "POINTS") {
-                                            currency = global["env"].arCurrencyPoints;
+                                            currency =
+                                                global["env"].arCurrencyPoints
                                         }
                                         // for INR user
                                         else if (data.currencyType == "INR") {
-                                            currency = global["env"].arCurrencyInr;
+                                            currency =
+                                                global["env"].arCurrencyInr
                                         }
                                         // accept currency code from request
                                         else {
-                                            currency = data.currencyType;
+                                            currency = data.currencyType
                                         }
                                     }
                                 }
-                                Sessions.createIframe(
+
+                                SessionsModel.createIframe(
                                     data,
                                     savedData.sessionId,
                                     currency,
                                     callback
-                                );
+                                )
                             }
-                        });
+                        })
                     }
                 });
             }
@@ -262,10 +273,10 @@ export default {
                 }
             }
         }
-        // console.log("datassssssss", datas)
-        // console.log("%%%%%%%%%%%%%", global["env"]);
+        console.log("datassssssss", datas)
+        console.log("%%%%%%%%%%%%%", global["env"]);
 
-        /* request.post(
+        request.post(
             {
                 // url: global["env"].evoURL,
                 url: "https://kingscasino.uat1.evo-test.com/ua/v1/kingscasino00001/test123",
@@ -276,7 +287,7 @@ export default {
                 console.log("%%%%%%%%%%%%%", body);
                 callback(error, body)
             }
-        ) */
+        )
     },
 
     checkUser: function (data, callback) {
