@@ -104,7 +104,7 @@ export default {
         })
     },
 
-    createLoginSidNew: function (data, callback) {
+    authenticate: function (data, callback) {
         const uuidv1 = require("uuid/v1")
 
         data.url = ConfigModel.getMainServer(data.frontendUrl)
@@ -120,8 +120,7 @@ export default {
                 sessionId: 1
             }
         ).exec(function (err, found) {
-            console.log("Session found ::::: ", found)
-
+            // console.log("Session found ::::: ", found)
             if (err) {
                 var responseData = {}
                 responseData.status = "INVALID_USERID22"
@@ -157,8 +156,8 @@ export default {
                     currency,
                     callback
                 )
-            }  else {
-                SessionsModel.checkUser(data, function(err, userData) {
+            } else {
+                SessionsModel.checkUser(data, function   (err, userData) {
                     if (err) {
                         var responseData = {}
                         responseData.status = "INVALID_PARAMETER"
@@ -180,16 +179,15 @@ export default {
                         data.status = "Active"
                         // data.url = Config.getMainServer(data.frontendUrl);
                         data.domain = data.frontendUrl
-                        console.log("%%%%%%%%%%%%%%data%%%%%%%%%%%%%%%", data)
+                        // console.log("%%%%%%%%%%%%%%data%%%%%%%%%%%%%%%", data)
 
-                        
                         // Sessions.saveData(data, function(err, savedData) {
                         var saveSessionData = new Sessions(data)
                         saveSessionData.save(function (err, savedData) {
-                            console.log(
-                                "%%%%%%%%%%%%%%savedData%%%%%%%%%%%%%%%",
-                                savedData
-                            )
+                            // console.log(
+                            //     "%%%%%%%%%%%%%%savedData%%%%%%%%%%%%%%%",
+                            //     savedData
+                            // )
                             if (err) {
                                 var responseData = {}
                                 responseData.status = "UNKNOWN_ERROR"
@@ -230,7 +228,7 @@ export default {
                             }
                         })
                     }
-                });
+                })
             }
         })
     },
@@ -273,18 +271,19 @@ export default {
                 }
             }
         }
-        console.log("datassssssss", datas)
-        console.log("%%%%%%%%%%%%%", global["env"]);
+        // console.log("datassssssss", datas)
+        // console.log("%%%%%%%%%%%%%", global["env"])
 
         request.post(
             {
                 // url: global["env"].evoURL,
-                url: "https://kingscasino.uat1.evo-test.com/ua/v1/kingscasino00001/test123",
+                url:
+                    "https://kingscasino.uat1.evo-test.com/ua/v1/kingscasino00001/test123",
                 body: datas,
                 json: true
             },
             function (error, response, body) {
-                console.log("%%%%%%%%%%%%%", body);
+                // console.log("%%%%%%%%%%%%%", body)
                 callback(error, body)
             }
         )
@@ -298,8 +297,8 @@ export default {
         if (data.accessToken) {
             userData._accessToken = data.accessToken
         }
-        console.log("mainServer ::::: ", mainServer)
-        console.log("userData ::::: ", userData)
+        // console.log("mainServer ::::: ", mainServer)
+        // console.log("userData ::::: ", userData)
 
         request.post(
             {
@@ -309,7 +308,7 @@ export default {
                 json: true
             },
             function (error, response, body) {
-                console.log("body ::::: ", body);
+                // console.log("body ::::: ", body)
 
                 if (error) {
                     callback(error, null)

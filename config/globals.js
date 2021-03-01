@@ -25,10 +25,10 @@
 
         global.env.PORT = 3000
 
-        console.log("INSIDE GLOBAL.JS IFFFFFF :::::", global.env.MONGODB_URL)
+        // console.log("INSIDE GLOBAL.JS IFFFFFF :::::", global.env.MONGODB_URL)
     } else {
         global.env.MONGODB_URL =
             "mongodb://iceexch:cpbDLN4e728d05VM@iceexch-shard-00-00-dzuqc.mongodb.net:27017,iceexch-shard-00-01-dzuqc.mongodb.net:27017,iceexch-shard-00-02-dzuqc.mongodb.net:27017/cmroyalexch-racebook-cmlevel?authSource=admin&replicaSet=IceExch-shard-0&retryWrites=true&ssl=true&w=majority"
 
-        console.log("INSIDE GLOBAL.JS ELSEEEE :::::", global.env.MONGODB_URL)
+        // console.log("INSIDE GLOBAL.JS ELSEEEE :::::", global.env.MONGODB_URL)
     }

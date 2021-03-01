@@ -14,7 +14,7 @@ export default {
             //     result
             // )
             if (err || _.isEmpty(result)) {
-                callback("Not Registered")
+                callback("Domain Not Registered")
             } else {
                 callback(null, result)
             }

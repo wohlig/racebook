@@ -4,10 +4,10 @@ const router = Router()
     author: Siddhesh Salunkhe
     description: 
 */
-router.post("/createLoginSidNew", (req, res) => {
+router.post("/authenticate", (req, res) => {
     if (req && req.body) {
         req.body.frontendUrl = req.headers.origin;
-        // console.log("Body from createLoginSidNew function ::::: ", req.body)
+        // console.log("Body from authenticate function ::::: ", req.body)
         
         if (req.body && req.body.userId) {
             DomainWhitelistModel.verifyDomain(req.body, function (err, domainDetail) {
@@ -17,7 +17,7 @@ router.post("/createLoginSidNew", (req, res) => {
                     responseData.status = "INVALID_USERID";
                     res.callback(null, responseData);
                 } else {
-                    SessionsModel.createLoginSidNew(req.body, res.callback);
+                    SessionsModel.authenticate(req.body, res.callback);
                 }
             })
         } else {

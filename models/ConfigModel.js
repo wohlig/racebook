@@ -23,7 +23,7 @@ export default {
         // )
 
         if (userUrl[1] == "matrixexch9" || userUrl[1] == "fairplay") {
-            console.log("--inside matrixExch--")
+            // console.log("--inside matrixExch--")
             return "https://users.playexch.co/api/"
         } else {
             return `https://users.${userUrl[1]}.${userUrl[0]}/api/`
