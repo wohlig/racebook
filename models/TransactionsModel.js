@@ -79,6 +79,7 @@ export default {
                                 method: "POST",
                                 url:
                                     "http://localhost:1339/Api/Racebook/getBalance",
+                                // url: arg1.url + "Racebook/getBalance",
                                 // url: arg1.url + "AR/getBalance",
                                 body: {
                                     id: data.userId ? data.userId : "",
