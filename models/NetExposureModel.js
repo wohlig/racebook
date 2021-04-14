@@ -37,7 +37,15 @@ export default {
                         !_.isEmpty(netExposureData) &&
                         !_.isEmpty(netExposureData[0])
                     ) {
+                        console.log(
+                            "GetNetExpoByuser ::::: netExposureData before ::::: ",
+                            netExposureData
+                        )
                         netExposureData[0].amount *= -1
+                        console.log(
+                            "GetNetExpoByuser ::::: netExposureData after ::::: ",
+                            netExposureData
+                        )
                     } else {
                         netExposureData = [{}]
                         netExposureData[0].amount = 0

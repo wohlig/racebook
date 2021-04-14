@@ -6,7 +6,7 @@ export default {
     debitWallet: (data, callback) => {
         var rate
         var m = moment()
-        // console.log("IN MODELLLLLL ::::: ", m, data)
+        console.log("debitWallet ::::: data ::::: ", data)
 
         function getDiff(val) {
             console.log("getDiff ::::: ", val, "=====", moment().diff(m, "ms"))
@@ -20,7 +20,8 @@ export default {
                         Check if session id exists or not for a particular user
                     */
                     getDiff("Waterfall 1---->>")
-                    // console.log("Waterfall 1---->>", data)
+
+                    console.log("debitWallet ::::: Waterfall 1---->>", data)
                     SessionsModel.sessionExists(data, callback)
                 },
                 (arg, callback) => {
@@ -28,13 +29,18 @@ export default {
                         Check if transaction exists or not for a particular user
                     */
                     getDiff("Time taken for sessionExists")
-                    // console.log("Waterfall 2---->>", arg)s
+                    console.log("Waterfall 2---->>", arg)
+
                     if (arg.status == "OK") {
                         data.url = arg.url ? arg.url : ""
 
                         TransactionsModel.txExists(data, (err, txData) => {
                             getDiff("Time taken for txExists")
-                            // console.log("Time taken for txExists----->>", txData)
+                            console.log(
+                                "debitWallet ::::: Waterfall 2---->>",
+                                txData
+                            )
+
                             if (err) {
                                 var responseData = {}
                                 responseData.status = "UNKNOWN_ERROR"
@@ -58,12 +64,16 @@ export default {
                     /* 
                         Call getBalance from kings-user
                     */
-                    // console.log("Waterfall 3---->>", arg1)
+                    console.log("debitWallet ::::: Waterfall 3---->>", arg1)
+                    
                     NetExposureModel.GetNetExpoByuser(data, (err, exposure) => {
                         if (err) {
                             callback(err)
                         } else {
-                            // console.log("GetNetExpoByuser ::::: Exposure amt --------->", exposure);
+                            console.log(
+                                "GetNetExpoByuser ::::: Exposure amt --------->",
+                                exposure
+                            )
 
                             let options = {
                                 method: "POST",
@@ -72,8 +82,10 @@ export default {
                                 // url: arg1.url + "AR/getBalance",
                                 body: {
                                     id: data.userId ? data.userId : "",
-                                    netExpo: 250,
-                                    // netExpo: exposure.amount ? exposure.amount : 0,
+                                    // netExpo: 250,
+                                    netExpo: exposure.amount
+                                        ? exposure.amount
+                                        : 0,
                                     betInfo: data ? data : ""
                                 },
                                 json: true
@@ -135,8 +147,11 @@ export default {
                     })
                 },
                 (arg1, callback) => {
-                    // console.log("Waterfall 4 data ---->>", data);
-                    // console.log("Waterfall 4 arg1 ---->>", arg1);
+                    console.log(
+                        "debitWallet ::::: Waterfall 4 data ---->>",
+                        data
+                    )
+                    console.log("Waterfall 4 arg1 ---->>", arg1)
 
                     if (!_.isEmpty(arg1)) {
                         async.parallel(
@@ -150,6 +165,11 @@ export default {
                                         refId: data.transaction.refId,
                                         rate: rate
                                     }
+                                    console.log(
+                                        "netExpo dataToSave::::: ",
+                                        dataToSave
+                                    )
+
                                     var saveNetExposure = new NetExposure(
                                         dataToSave
                                     )
@@ -169,6 +189,12 @@ export default {
                                     data.type = "debit"
                                     data.subGame = data.game.type
                                     data.rate = rate
+
+                                    console.log(
+                                        "transactions ::::: data ::::: ",
+                                        data
+                                    )
+
                                     var saveDebitTransaction = new Transactions(
                                         data
                                     )
@@ -196,7 +222,12 @@ export default {
                     }
                 },
                 (balance, callback) => {
-                    // console.log("Waterfall 5---->>", currentBalance, data.transaction.amount)
+                    console.log(
+                        "debitWallet ::::: Waterfall 5---->>",
+                        currentBalance,
+                        data.transaction.amount
+                    )
+
                     var responseData = {}
                     responseData.status = "OK"
                     responseData.balance =
@@ -231,18 +262,18 @@ export default {
                             data: {}
                         }
                         let userUrl = data.url
-                        // console.log("1111: userUrl", userUrl);
+                        console.log("1111: userUrl", userUrl)
                         let socketUrl = userUrl.replace("users", "kings-socket")
-                        // console.log("2222: socketUrl", socketUrl);
+                        console.log("2222: socketUrl", socketUrl)
                         socketUrl = socketUrl.replace("api/", "callSocket")
-                        // console.log("3333: socketUrl", socketUrl);
+                        console.log("3333: socketUrl", socketUrl)
 
                         // if royal's replace with zodeexchange url
                         socketUrl = socketUrl.replace(
                             "royalexch.in",
                             "zodexchange.com"
                         )
-                        // console.log("4444: socketUrl", socketUrl);
+                        console.log("4444: socketUrl", socketUrl)
                         request.post(
                             {
                                 headers: {
@@ -253,7 +284,7 @@ export default {
                                 json: true
                             },
                             (error, response, body) => {
-                                // console.log("-------debit socket-----");
+                                console.log("-------debit socket-----")
                             }
                         )
                     }

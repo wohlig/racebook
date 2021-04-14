@@ -5,12 +5,13 @@ const router = Router()
     description:  
 */
 router.post("/debit", (req, res) => {
-    // console.log("IN CONTROLLERRRRRRR :::::", req.body)
+    console.log("Debit Call ::::: ", req.body)
     req.body.frontendUrl = req.headers.origin
     if (
         req.body &&
-        req.body.userId &&
-        req.query.authToken == global["env"].authToken
+        req.body.userId
+        // &&
+        // req.query.authToken == global["env"].authToken
     ) {
         TransactionsModel.debitWallet(req.body, res.callback)
     } else {
@@ -51,14 +52,15 @@ router.post("/credit", (req, res) => {
 */
 router.post("/balance", (req, res) => {
     req.body.frontendUrl = req.headers.origin;
-    // console.log("Balance Call", req.body);
-    // console.log("Balance Call", req.query);
+    
+    console.log("Balance Call", req.body)
+    console.log("Balance Call", req.query)
     if (
         req.body &&
         req.body.userId 
         // req.query.authToken == global["env"].authToken
     ) {
-        // console.log("Balance req.body : ", req.body)
+        console.log("Balance ::::: req.body ::::: ", req.body)
         SessionsModel.balanceWallet(req.body, res.callback);
     } else {
         // console.log("Body not set for balance ", req.body)

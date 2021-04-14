@@ -7,12 +7,12 @@ export default {
         DomainWhitelist.findOne({
             domain: data.frontendUrl
         }).exec((err, result) => {
-            // console.log(
-            //     "verifyDomain err ::::: ",
-            //     err,
-            //     "verifyDomain result ::::: ",
-            //     result
-            // )
+            console.log(
+                "verifyDomain err ::::: ",
+                err,
+                "verifyDomain result ::::: ",
+                result
+            )
             if (err || _.isEmpty(result)) {
                 callback("Domain Not Registered")
             } else {

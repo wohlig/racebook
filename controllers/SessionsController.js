@@ -7,11 +7,12 @@ const router = Router()
 router.post("/authenticate", (req, res) => {
     if (req && req.body) {
         req.body.frontendUrl = req.headers.origin;
-        // console.log("Body from authenticate function ::::: ", req.body)
+        console.log("Body from authenticate function ::::: ", req.body)
         
         if (req.body && req.body.userId) {
             DomainWhitelistModel.verifyDomain(req.body, function (err, domainDetail) {
-                // console.log("domainDetail", domainDetail);
+                console.log("domainDetail ::::: ", domainDetail)
+                
                 if (err) {
                     let responseData = {};
                     responseData.status = "INVALID_USERID";

@@ -14,9 +14,10 @@ export default {
                 url: 1
             }
         ).exec((err, found) => {
-            // console.log("1", found)
-            // console.log("2", found.userId);
-            // console.log("3", data.userId);
+            console.log("sessionExists ::::: found ::::: ", found)
+            console.log("sessionExists ::::: found.userId ::::: ", found.userId);
+            console.log("sessionExists ::::: data.userId ::::: ", data.userId);
+
             if (err || _.isEmpty(found)) {
                 var responseData = {}
                 responseData.status = "INVALID_SID"
@@ -41,7 +42,7 @@ export default {
     },
 
     balanceWallet: function (data, callback) {
-        // console.log("<><><balanceWallet><><>", data)
+        console.log("balanceWallet ::::: data ::::: ", data)
 
         Sessions.findOne(
             {
@@ -59,22 +60,27 @@ export default {
             } else if (found) {
                 var userData = {}
                 userData.id = data.userId
-                // console.log("*********", userData)
+                
+                console.log("balanceWallet ::::: found ::::: ", found)
+                console.log("balanceWallet ::::: userData ::::: ", userData)
+
+                console.log(found.url + "Racebook/getCurrentBalanceNew")
 
                 request.post(
                     {
                         // url: found.url + "AR/getCurrentBalanceNew",
-                        url:
-                            "http://localhost:1339/Api/Racebook/getCurrentBalanceNew",
+                        // url:
+                        //     "http://localhost:1339/Api/Racebook/getCurrentBalanceNew",
+                        url: found.url + "Racebook/getCurrentBalanceNew",
                         body: userData,
                         json: true
                     },
                     function (error, response, body) {
-                        // console.log(
-                        //     "*******balanceWallet BODY*********",
-                        //     error,
-                        //     body
-                        // )
+                        console.log(
+                            "balanceWallet Responseee ::::: body ::::: ",
+                            error,
+                            body
+                        )
                         if (error || body.error) {
                             var responseData = {}
                             responseData.status = "INVALID_PARAMETER"
@@ -108,8 +114,8 @@ export default {
         const uuidv1 = require("uuid/v1")
 
         data.url = ConfigModel.getMainServer(data.frontendUrl)
-        // console.log("data ::::: ", data)
-        // console.log("data.url ::::: ", data.url)
+        console.log("authenticate ::::: data ::::: ", data)
+        console.log("authenticate ::::: data.url ::::: ", data.url)
 
         Sessions.findOne(
             {
@@ -120,13 +126,17 @@ export default {
                 sessionId: 1
             }
         ).exec(function (err, found) {
-            // console.log("Session found ::::: ", found)
+            console.log("authenticate ::::: Session found ::::: ", found)
             if (err) {
                 var responseData = {}
                 responseData.status = "INVALID_USERID22"
                 callback(null, responseData)
             } else if (found) {
-                // console.log("TESTTTTTTTTTTt", global["env"])
+                console.log(
+                    "authenticate ::::: global[env] ::::: ",
+                    global["env"]
+                )
+
                 var currency = "HKD"
                 if (
                     global["env"].arCurrencyPoints &&
@@ -177,17 +187,21 @@ export default {
                         data.userId = data.userId
                         data.sessionId = uuidv1()
                         data.status = "Active"
-                        // data.url = Config.getMainServer(data.frontendUrl);
+                        // data.url = Config.getMainServer(data.frontendUrl)
                         data.domain = data.frontendUrl
-                        // console.log("%%%%%%%%%%%%%%data%%%%%%%%%%%%%%%", data)
+
+                        console.log(
+                            "authenticate ::::: data ::::: ",
+                            data
+                        )
 
                         // Sessions.saveData(data, function(err, savedData) {
                         var saveSessionData = new Sessions(data)
                         saveSessionData.save(function (err, savedData) {
-                            // console.log(
-                            //     "%%%%%%%%%%%%%%savedData%%%%%%%%%%%%%%%",
-                            //     savedData
-                            // )
+                            console.log(
+                                "authenticate ::::: savedData ::::: ",
+                                savedData
+                            )
                             if (err) {
                                 var responseData = {}
                                 responseData.status = "UNKNOWN_ERROR"
@@ -236,9 +250,9 @@ export default {
     createIframe: function (data, sessionId, currency, callback) {
         const uuidv1 = require("uuid/v1")
 
-        // console.log("createIframe data----->>>", data)
-        // console.log("createIframe sessionId----->>>", sessionId)
-        // console.log("createIframe v----->>>", currency)
+        console.log("createIframe ::::: data ::::: ", data)
+        console.log("createIframe ::::: sessionId ::::: ", sessionId)
+        console.log("createIframe ::::: currency ::::: ", currency)
 
         var datas = {
             uuid: uuidv1(),
@@ -271,8 +285,8 @@ export default {
                 }
             }
         }
-        // console.log("datassssssss", datas)
-        // console.log("%%%%%%%%%%%%%", global["env"])
+        console.log("createIframe ::::: datassssssss ::::: ", datas)
+        console.log("createIframe ::::: global[env] ::::: ", global["env"])
 
         request.post(
             {
@@ -283,7 +297,7 @@ export default {
                 json: true
             },
             function (error, response, body) {
-                // console.log("%%%%%%%%%%%%%", body)
+                console.log("createIframe ::::: body ::::: ", body)
                 callback(error, body)
             }
         )
@@ -297,18 +311,19 @@ export default {
         if (data.accessToken) {
             userData._accessToken = data.accessToken
         }
-        // console.log("mainServer ::::: ", mainServer)
-        // console.log("userData ::::: ", userData)
+        
+        console.log("checkUser ::::: mainServer ::::: ", mainServer)
+        console.log("checkUser ::::: userData ::::: ", userData)
 
         request.post(
             {
-                url: "http://localhost:1339/Api/member/getOne",
-                // url: mainServer + "member/getOne",
+                // url: "http://localhost:1339/Api/member/getOne",
+                url: mainServer + "member/getOne",
                 body: userData,
                 json: true
             },
             function (error, response, body) {
-                // console.log("body ::::: ", body)
+                console.log("checkUser ::::: body ::::: ", body)
 
                 if (error) {
                     callback(error, null)
