@@ -16,6 +16,7 @@ export default {
                     $gte: moment().subtract(10, "minutes").toDate()
                 }
             }
+            console.log("GetNetExpoByuser ::::: query ::::: ", query)
 
             NetExposure.aggregate([
                 {
@@ -72,6 +73,8 @@ export default {
             if (data.transaction && data.transaction.refId) {
                 query.refId = data.transaction.refId
             }
+            console.log("GetNetExposureByUser ::::: query ::::: ", query)
+
             NetExposure.aggregate([
                 {
                     $match: query
@@ -92,7 +95,15 @@ export default {
                         !_.isEmpty(netExposureData) &&
                         !_.isEmpty(netExposureData[0])
                     ) {
+                        console.log(
+                            "GetNetExposureByUser ::::: netExposureData before ::::: ",
+                            netExposureData
+                        )
                         netExposureData[0].amount *= -1
+                        console.log(
+                            "GetNetExposureByUser ::::: netExposureData after ::::: ",
+                            netExposureData
+                        )
                     } else {
                         netExposureData = [{}]
                         netExposureData[0].amount = 0

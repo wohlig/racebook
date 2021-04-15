@@ -318,7 +318,7 @@ export default {
     
     */
     creditWallet: function (data, callback) {
-        // console.log("data:::::::", data);
+        console.log("creditWallet ::::: data ::::: ", data)
 
         var rate
         async.waterfall(
@@ -334,13 +334,16 @@ export default {
                         check duplication result entry.
                         it should not exists
                     */
-                    // console.log("1 waterfall ::::: ", arg);
+                    console.log("creditWallet ::::: 1 waterfall ::::: ", arg)
 
                     if (arg.status == "OK") {
                         data.url = arg.url ? arg.url : "";
 
                         TransactionsModel.txExists(data, function (err, txData) {
-                            // console.log("2 waterfall :::::  ::::: ", txData);
+                            console.log(
+                                "creditWallet ::::: 2 waterfall ::::: ",
+                                txData
+                            )
 
                             if (err) {
                                 var responseData = {}
@@ -367,11 +370,16 @@ export default {
                     /* 
                         check bet exists.
                     */
+                    console.log("data.transaction.refId ::::: ", data.transaction.refId)
+
                     Transactions.findOne({
                         "transaction.refId": data.transaction.refId,
                         type: "debit"
                     }).exec(function (err, found) {
-                        // console.log("3 waterfall ::::: ", found);
+                        console.log(
+                            "creditWallet ::::: 3 waterfall ::::: ",
+                            found
+                        )
 
                         if (err) {
                             var responseData = {}
@@ -398,7 +406,10 @@ export default {
                     data.rate = arg.rate
                     var creditTransaction = new Transactions(data)
                     creditTransaction.save(function (err, savedData) {
-                        // console.log("4 waterfall ::::: ", savedData);
+                        console.log(
+                            "creditWallet ::::: 4 waterfall ::::: ",
+                            savedData
+                        )
                         if (err) {
                             var responseData = {}
                             responseData.status = "UNKNOWN_ERROR"
@@ -414,7 +425,10 @@ export default {
                     NetExposureModel.GetNetExposureByUser(data, callback)
                 },
                 (netexposureSum, callback) => {
-                    // console.log("5 waterfall ::::: ", netexposureSum);
+                    console.log(
+                        "creditWallet ::::: 5 waterfall ::::: ",
+                        netexposureSum
+                    )
 
                     var winAmount, loseAmount, newAmount
                     winAmount = newAmount
@@ -429,23 +443,28 @@ export default {
                         _id: data.userId,
                         account: data
                     }
-                    // console.log("obj ============ ", obj);
-                    // console.log(" obj.win + obj.lose", parseInt(obj.win) - obj.lose)
+                    console.log("creditWallet ::::: obj ::::: ", obj)
+                    console.log(
+                        " obj.win + obj.lose",
+                        parseInt(obj.win) - obj.lose
+                    )
                     request.post(
                         {
                             // url: obj.url + "AR/createAccountStatement",
-                            url: "http://localhost:1339/Api/Racebook/createAccountStatement",
+                            url: obj.url + "Racebook/createAccountStatement",
+                            // url:
+                            //     "http://localhost:1339/Api/Racebook/createAccountStatement",
                             body: obj,
                             json: true
                         },
                         function (error, response, body) {
                             if (error) {
-                                // console.log(
-                                //   "CREDIT::account stmt. response---",
-                                //   body,
-                                //   "OBJ----",
-                                //   obj
-                                // );
+                                console.log(
+                                  "CREDIT::account stmt. response---",
+                                  body,
+                                  "OBJ----",
+                                  obj
+                                );
                             }
                             Transactions.update(
                                 {
@@ -462,9 +481,10 @@ export default {
                                 }
                             ).exec(function (err, result) {
                                 console.log(
-                                  "credit transaction update ERR----->",
-                                  err, result
-                                );
+                                    "credit transaction update ERR----->",
+                                    err,
+                                    result
+                                )
                                 callback()
                             })
                         }
@@ -475,10 +495,10 @@ export default {
                     NetExposureModel.updateNetExposure(data, callback)
                 },
                 (userDetail, callback) => {
-                    // console.log('<><><userDetail><><>', userDetail);
+                    console.log('creditWallet ::::: userDetail ::::: ', userDetail);
                     
                     SessionsModel.balanceWallet(data, function (err, userData) {
-                        // console.log('<><><userDetail><><>', userData);
+                        console.log('creditWallet ::::: userDetail ::::: ', userData);
                         if (err) {
                             var responseData = {}
                             responseData.status = "INVALID_PARAMETER"
@@ -490,7 +510,7 @@ export default {
                 }
             ],
             function (err, result) {
-                console.log("MAIN RESULTTTTT", result);
+                console.log("MAIN RESULTTTTT CREDIT CALL ::::: result ::::: ", result);
                 if (err) {
                     callback(null, result)
                 } else {

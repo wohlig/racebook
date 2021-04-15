@@ -26,23 +26,27 @@ router.post("/debit", (req, res) => {
     description:  
 */
 router.post("/credit", (req, res) => {
-    // console.log("IN CONTROLLERRRRRRR :::::", req.body)
+    console.log("Credit Call ::::: ", req.body)
+
     // req.transactionDumpObj = TransactionDump({
     //     type: "credit",
     //     request: req.body
-    // });
+    // })
 
-    req.body.frontendUrl = req.headers.origin;
+    req.body.frontendUrl = req.headers.origin
     if (
         req.body &&
-        req.body.userId &&
-        req.query.authToken == global["env"].authToken
+        req.body.userId
+        // &&
+        // req.query.authToken == global["env"].authToken
     ) {
-        TransactionsModel.creditWallet(req.body, res.callback);
+        console.log("Credit Call ::::: req.body ::::: ", req.body)
+
+        TransactionsModel.creditWallet(req.body, res.callback)
     } else {
-        var responseData = {};
-        responseData.status = "INVALID_TOKEN_ID";
-        res.callback(null, responseData);
+        var responseData = {}
+        responseData.status = "INVALID_TOKEN_ID"
+        res.callback(null, responseData)
     }
 })
 
