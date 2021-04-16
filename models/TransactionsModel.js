@@ -460,11 +460,11 @@ export default {
                         function (error, response, body) {
                             if (error) {
                                 console.log(
-                                  "CREDIT::account stmt. response---",
-                                  body,
-                                  "OBJ----",
-                                  obj
-                                );
+                                    "CREDIT::account stmt. response---",
+                                    body,
+                                    "OBJ----",
+                                    obj
+                                )
                             }
                             Transactions.update(
                                 {
