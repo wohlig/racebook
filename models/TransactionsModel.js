@@ -458,6 +458,11 @@ export default {
                             json: true
                         },
                         function (error, response, body) {
+                            console.log(
+                                "Afterrrrrrrrr create account statement ::::: ",
+                                data.transaction.refId
+                            )
+
                             if (error) {
                                 console.log(
                                     "CREDIT::account stmt. response---",

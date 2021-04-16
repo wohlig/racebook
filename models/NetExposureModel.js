@@ -115,6 +115,12 @@ export default {
     },
 
     updateNetExposure(data, callback) {
+        console.log("updateNetExposure ::::: queryyyyyyyyyy ::::: ", {
+            userId: data.userId,
+            url: data.url,
+            refId: data.transaction.refId
+        })
+
         NetExposure.update(
             {
                 userId: data.userId,
