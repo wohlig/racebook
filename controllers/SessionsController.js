@@ -5,6 +5,7 @@ const router = Router()
     description: 
 */
 router.post("/authenticate", (req, res) => {
+    console.log("innnnnnnn")
     if (req && req.body) {
         req.body.frontendUrl = req.headers.origin;
         console.log("Body from authenticate function ::::: ", req.body)
