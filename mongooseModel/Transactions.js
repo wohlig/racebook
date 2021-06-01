@@ -29,7 +29,7 @@ var schema = new Schema({
             index: true
         },
         amount: {
-            type: String
+            type: Number
         },
         odds: {
             type: Number
@@ -37,23 +37,23 @@ var schema = new Schema({
         bettype: {
             type: String
         },
-        timeofbet: {
-            type: Date
-        },
-        RunnerName: {
+        timeOfBet: {
             type: String
         },
-        MeetingName: {
+        runnerName: {
             type: String
         },
-        MeetingID: {
+        meetingName: {
             type: String
         },
-        EventNo: {
-            type: Number
+        meetingId: {
+            type: String
         },
-        RunnerNo: {
-            type: Number
+        eventNo: {
+            type: String
+        },
+        runnerNo: {
+            type: String
         }
     },
     type: String,
