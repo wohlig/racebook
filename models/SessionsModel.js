@@ -286,13 +286,12 @@ export default {
             }
         }
         console.log("createIframe ::::: datassssssss ::::: ", datas)
-        console.log("createIframe ::::: global[env] ::::: ", global["env"])
+        // console.log("createIframe ::::: global[env] ::::: ", global["env"])
 
         request.post(
             {
                 // url: global["env"].evoURL,
-                url:
-                    "https://kingscasino.uat1.evo-test.com/ua/v1/kingscasino00001/test123",
+                url: "https://kingscasino.uat1.evo-test.com/ua/v1/kingscasino00001/test123",
                 body: datas,
                 json: true
             },
