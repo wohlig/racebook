@@ -38,7 +38,10 @@ var schema = new Schema({
             type: String
         },
         timeOfBet: {
-            type: String
+            type: Number
+        },
+        timeOfRace: {
+            type: Number
         },
         runnerName: {
             type: String
