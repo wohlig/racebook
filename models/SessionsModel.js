@@ -248,12 +248,20 @@ export default {
     },
 
     createIframe: function (data, sessionId, currency, callback) {
-        const uuidv1 = require("uuid/v1")
-
+        
         console.log("createIframe ::::: data ::::: ", data)
         console.log("createIframe ::::: sessionId ::::: ", sessionId)
         console.log("createIframe ::::: currency ::::: ", currency)
+        let obj = {
+            data : data,
+            sessionId : sessionId,
+            currency : currency
+        }
+        console.log("obj ::::: ", obj)
 
+        callback(null, obj)
+        
+        /* const uuidv1 = require("uuid/v1")
         var datas = {
             uuid: uuidv1(),
             player: {
@@ -299,7 +307,7 @@ export default {
                 console.log("createIframe ::::: body ::::: ", body)
                 callback(error, body)
             }
-        )
+        ) */
     },
 
     checkUser: function (data, callback) {
