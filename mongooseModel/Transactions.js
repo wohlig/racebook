@@ -1,25 +1,14 @@
 var schema = new Schema({
-    sid: String,
-    userId: {
+    sid: String, //
+    userId: { //
         type: Schema.Types.ObjectId,
         ref: "User"
     },
-    currency: {
-        type: String
-    },
-    rate: {
-        type: Number,
-        default: 1
-    },
-    winLoseAmt: {
-        type: Number
-    },
-    game: {},
-    subGame: {
+    currency: { //
         type: String
     },
     url: String,
-    transaction: {
+    transaction: { //
         id: {
             type: String,
             index: true
@@ -40,8 +29,16 @@ var schema = new Schema({
         timeOfBet: {
             type: Number
         },
+        // convert timeOfBet To Date
+        timeOfBetConvert: {
+            type: Date
+        },
         timeOfRace: {
             type: Number
+        },
+        // convert timeOfRace To Date
+        timeOfRaceConvert: {
+            type: Date
         },
         runnerName: {
             type: String
@@ -59,7 +56,44 @@ var schema = new Schema({
             type: String
         }
     },
-    type: String,
+    timeOfBetConvert: { //
+        type: Date
+    },
+    timeOfRaceConvert: { //
+        type: Date
+    },
+    eventNo: { //
+        type: Number
+    },
+    runnerNo: { //
+        type: Number
+    },
+    meetingId : { //
+        type: String
+    },
+    type: String, // [debit or credit]
+    createdAt: { //
+        type: Date,
+        default: Date.now
+    },
+    updatedAt: { //
+        type: Date,
+        default: Date.now
+    },
+    /*
+        extra keys as per I-frame integration
+    */
+    rate: {
+        type: Number,
+        default: 1
+    },
+    winLoseAmt: {
+        type: Number
+    },
+    game: {},
+    subGame: {
+        type: String
+    },
     playId: String,
     transactionSentToMainServer: {
         type: Boolean,
@@ -77,14 +111,6 @@ var schema = new Schema({
     detailInfo: {
         type: Schema.Types.Mixed
     },
-    createdAt: {
-        type: Date,
-        default: Date.now
-    },
-    updatedAt: {
-        type: Date,
-        default: Date.now
-    }
 })
 
 export default mongoose.model("Transactions", schema)

@@ -188,12 +188,34 @@ export default {
                                 },
                                 // save transactions
                                 transactions: (callback) => {
+                                    console.log("data from waterfall ::::: <><><> ::::: ", data)
+
                                     data.type = "debit"
                                     data.subGame = data.game.type
                                     data.rate = rate
 
                                     console.log(
                                         "transactions ::::: data ::::: ",
+                                        data
+                                    )
+                                    
+                                    if (data.transaction && data.transaction.timeOfBet && data.transaction.timeOfRace) {
+                                        console.log("IN DATE ::::: ", data.transaction.timeOfBet, data.transaction.timeOfRace)
+
+                                        // add new key for date and bet time inside transaction object
+                                        data.transaction.timeOfBetConvert = new Date(data.transaction.timeOfBet)
+                                        data.transaction.timeOfRaceConvert = new Date(data.transaction.timeOfRace)
+
+                                        // keys required outside transaction object
+                                        data.timeOfBetConvert = new Date(data.transaction.timeOfBet)
+                                        data.timeOfRaceConvert = new Date(data.transaction.timeOfRace)
+                                        data.eventNo = data.transaction.eventNo
+                                        data.runnerNo = data.transaction.runnerNo 
+                                        data.meetingId = data.transaction.meetingId
+                                    }
+
+                                    console.log(
+                                        "transactions ::::: data ::::: after conversion ::::: ",
                                         data
                                     )
 
