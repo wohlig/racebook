@@ -63,10 +63,10 @@ var schema = new Schema({
         type: Date
     },
     eventNo: { //
-        type: Number
+        type: String
     },
     runnerNo: { //
-        type: Number
+        type: String
     },
     meetingId : { //
         type: String
