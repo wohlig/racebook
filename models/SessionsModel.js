@@ -253,7 +253,7 @@ export default {
         console.log("createIframe ::::: sessionId ::::: ", sessionId)
         console.log("createIframe ::::: currency ::::: ", currency)
         let obj = {
-            data : data,
+            // data : data,
             sessionId : sessionId,
             currency : currency
         }
