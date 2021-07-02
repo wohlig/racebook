@@ -12,7 +12,7 @@ router.post("/authenticate", (req, res) => {
         if (req.body && req.body.userId) {
             DomainWhitelistModel.verifyDomain(
                 req.body,
-                function (err, domainDetail) {
+                (err, domainDetail) => {
                     console.log("domainDetail ::::: ", domainDetail)
 
                     if (err) {

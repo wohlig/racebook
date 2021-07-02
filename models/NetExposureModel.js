@@ -3,7 +3,7 @@ export default {
         author: Siddhesh Salunkhe
         description: 
     */
-    GetNetExpoByuser(data, callback) {
+    GetNetExpoByuser: (data, callback) => {
         var query = {}
         if (!data.url) {
             callback("URL Missing")
@@ -57,7 +57,7 @@ export default {
         }
     },
 
-    GetNetExposureByUser(data, callback) {
+    GetNetExposureByUser: (data, callback) => {
         var query = {}
         if (!data.url) {
             callback("URL Missing")
@@ -114,7 +114,7 @@ export default {
         }
     },
 
-    updateNetExposure(data, callback) {
+    updateNetExposure: (data, callback) => {
         console.log("updateNetExposure ::::: queryyyyyyyyyy ::::: ", {
             userId: data.userId,
             url: data.url,

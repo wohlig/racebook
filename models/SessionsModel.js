@@ -1,9 +1,10 @@
 export default {
+
     /* 
         author: Siddhesh Salunkhe
         description: Check sessions by session id and status
     */
-    sessionExists: function (data, callback) {
+    sessionExists: (data, callback) => {
         Sessions.findOne(
             {
                 sessionId: data.sid,
@@ -41,7 +42,7 @@ export default {
         })
     },
 
-    balanceWallet: function (data, callback) {
+    balanceWallet: (data, callback) => {
         console.log("balanceWallet ::::: data ::::: ", data)
 
         Sessions.findOne(
@@ -52,7 +53,7 @@ export default {
             {
                 url: 1
             }
-        ).exec(function (err, found) {
+        ).exec((err, found) => {
             if (err || _.isEmpty(found)) {
                 let responseData = {}
                 responseData.status = "INVALID_SID"
@@ -75,7 +76,7 @@ export default {
                         body: userData,
                         json: true
                     },
-                    function (error, response, body) {
+                    (error, response, body) => {
                         console.log(
                             "balanceWallet Responseee ::::: body ::::: ",
                             error,
@@ -110,7 +111,7 @@ export default {
         })
     },
 
-    authenticate: function (data, callback) {
+    authenticate: (data, callback) => {
         const uuidv1 = require("uuid/v1")
 
         data.url = ConfigModel.getMainServer(data.frontendUrl)
@@ -125,7 +126,7 @@ export default {
             {
                 sessionId: 1
             }
-        ).exec(function (err, found) {
+        ).exec((err, found) => {
             console.log("authenticate ::::: Session found ::::: ", found)
             if (err) {
                 var responseData = {}
@@ -167,7 +168,7 @@ export default {
                     callback
                 )
             } else {
-                SessionsModel.checkUser(data, function   (err, userData) {
+                SessionsModel.checkUser(data, (err, userData) => {
                     if (err) {
                         var responseData = {}
                         responseData.status = "INVALID_PARAMETER"
@@ -197,7 +198,7 @@ export default {
 
                         // Sessions.saveData(data, function(err, savedData) {
                         var saveSessionData = new Sessions(data)
-                        saveSessionData.save(function (err, savedData) {
+                        saveSessionData.save((err, savedData) => {
                             console.log(
                                 "authenticate ::::: savedData ::::: ",
                                 savedData
@@ -247,8 +248,7 @@ export default {
         })
     },
 
-    createIframe: function (data, sessionId, currency, callback) {
-        
+    createIframe: (data, sessionId, currency, callback) => {
         console.log("createIframe ::::: data ::::: ", data)
         console.log("createIframe ::::: sessionId ::::: ", sessionId)
         console.log("createIframe ::::: currency ::::: ", currency)
@@ -303,14 +303,14 @@ export default {
                 body: datas,
                 json: true
             },
-            function (error, response, body) {
+            (error, response, body) => {
                 console.log("createIframe ::::: body ::::: ", body)
                 callback(error, body)
             }
         ) */
     },
 
-    checkUser: function (data, callback) {
+    checkUser: (data, callback) => {
         var mainServer = ConfigModel.getMainServer(data.frontendUrl)
 
         var userData = {}
@@ -329,7 +329,7 @@ export default {
                 body: userData,
                 json: true
             },
-            function (error, response, body) {
+            (error, response, body) => {
                 console.log("checkUser ::::: body ::::: ", body)
 
                 if (error) {
@@ -344,4 +344,5 @@ export default {
             }
         )
     }
+
 }

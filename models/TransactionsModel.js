@@ -1,4 +1,5 @@
 export default {
+
     /* 
         author: Siddhesh Salunkhe
         description: 
@@ -293,6 +294,7 @@ export default {
             }
         )
     },
+
     /* 
         author: Siddhesh Salunkhe
         description: 
@@ -314,22 +316,23 @@ export default {
             callback(null, {})
         }
     },
+    
     /* 
     
     */
-    creditWallet: function (data, callback) {
+    creditWallet: (data, callback) => {
         console.log("creditWallet ::::: data ::::: ", data)
 
         var rate
         async.waterfall(
             [
-                function (callback) {
+                (callback) => {
                     /* 
                         user session exist
                     */
                     SessionsModel.sessionExists(data, callback)
                 },
-                function (arg, callback) {
+                (arg, callback) => {
                     /* 
                         check duplication result entry.
                         it should not exists
@@ -339,7 +342,7 @@ export default {
                     if (arg.status == "OK") {
                         data.url = arg.url ? arg.url : "";
 
-                        TransactionsModel.txExists(data, function (err, txData) {
+                        TransactionsModel.txExists(data, (err, txData) => {
                             console.log(
                                 "creditWallet ::::: 2 waterfall ::::: ",
                                 txData
@@ -366,7 +369,7 @@ export default {
                         callback("error", arg)
                     }
                 },
-                function (arg, callback) {
+                (arg, callback) => {
                     /* 
                         check bet exists.
                     */
@@ -375,7 +378,7 @@ export default {
                     Transactions.findOne({
                         "transaction.refId": data.transaction.refId,
                         type: "debit"
-                    }).exec(function (err, found) {
+                    }).exec((err, found) => {
                         console.log(
                             "creditWallet ::::: 3 waterfall ::::: ",
                             found
@@ -396,7 +399,7 @@ export default {
                         }
                     })
                 },
-                function (arg, callback) {
+                (arg, callback) => {
                     /* 
                         if bet exixts change type credit 
                     */
@@ -405,7 +408,7 @@ export default {
                     data.subGame = data.game.type
                     data.rate = arg.rate
                     var creditTransaction = new Transactions(data)
-                    creditTransaction.save(function (err, savedData) {
+                    creditTransaction.save((err, savedData) => {
                         console.log(
                             "creditWallet ::::: 4 waterfall ::::: ",
                             savedData
@@ -457,7 +460,7 @@ export default {
                             body: obj,
                             json: true
                         },
-                        function (error, response, body) {
+                        (error, response, body) => {
                             console.log(
                                 "Afterrrrrrrrr create account statement ::::: ",
                                 data.transaction.refId
@@ -484,7 +487,7 @@ export default {
                                 {
                                     multi: true
                                 }
-                            ).exec(function (err, result) {
+                            ).exec((err, result) => {
                                 console.log(
                                     "credit transaction update ERR----->",
                                     err,
@@ -502,7 +505,7 @@ export default {
                 (userDetail, callback) => {
                     console.log('creditWallet ::::: userDetail ::::: ', userDetail);
                     
-                    SessionsModel.balanceWallet(data, function (err, userData) {
+                    SessionsModel.balanceWallet(data, (err, userData) => {
                         console.log('creditWallet ::::: userDetail ::::: ', userData);
                         if (err) {
                             var responseData = {}
@@ -514,7 +517,7 @@ export default {
                     })
                 }
             ],
-            function (err, result) {
+            (err, result) => {
                 console.log("MAIN RESULTTTTT CREDIT CALL ::::: result ::::: ", result);
                 if (err) {
                     callback(null, result)
@@ -524,4 +527,5 @@ export default {
             }
         )
     }
+    
 }

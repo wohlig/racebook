@@ -3,7 +3,7 @@ export default {
         author: Siddhesh Salunkhe
         description: 
     */
-    getMainServer: function (url) {
+    getMainServer: (url) => {
         console.log("getMainServer userUrl ::::: ", url)
 
         var newUrl
