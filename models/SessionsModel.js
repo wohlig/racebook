@@ -15,15 +15,14 @@ export default {
                 url: 1
             }
         ).exec((err, found) => {
-            console.log("sessionExists ::::: found ::::: ", found)
-            console.log("sessionExists ::::: found.userId ::::: ", found.userId);
-            console.log("sessionExists ::::: data.userId ::::: ", data.userId);
-
             if (err || _.isEmpty(found)) {
                 var responseData = {}
                 responseData.status = "INVALID_SID"
                 callback(null, responseData)
             } else if (found) {
+                console.log("sessionExists ::::: found ::::: ", found)
+                console.log("sessionExists ::::: found.userId ::::: ", found.userId, data.userId);
+
                 if (found.userId + "" == data.userId + "") {
                     var responseData = {}
                     responseData.status = "OK"
@@ -343,6 +342,21 @@ export default {
                 }
             }
         )
-    }
+    },
 
+    /* 
+    setResultInProcess: function (marketId) {
+        global.resultInProcess.push(marketId)
+    },
+
+    checkResultInProcess: function (marketId) {
+        return _.includes(global.resultInProcess, marketId)
+    },
+
+    removeResultInProcess: function (marketId) {
+        _.remove(global.resultInProcess, function (n) {
+            return n == marketId
+        })
+    }
+    */
 }

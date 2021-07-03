@@ -74,4 +74,11 @@ router.post("/balance", (req, res) => {
     }
 })
 
+/* 
+    router.post("/getBetsForResult", (req, res) => {
+        console.log("IN ROUTEEEEEE")
+        TransactionsModel.getBetsForResult(req.body, res.callback);
+    })
+*/
+
 export default router

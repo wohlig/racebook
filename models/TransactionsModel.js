@@ -548,6 +548,33 @@ export default {
                 }
             }
         )
-    }
+    },
     
+    getBetsForResult: async () => {
+        // var a15minAgo = new Date( Date.now() - 15000 * 60 );
+        // var travelTime = moment().subtract(15, 'minutes').format('hh:mm A');
+
+        let startDate = moment().subtract(1, "days").startOf("day");
+        let endDate = moment().endOf("day");
+
+        console.log("<><>startDate<><>", startDate)
+        console.log("<><>endDate<><>", endDate)
+
+        let query = {
+            type: "debit",
+            timeOfRaceConvert: {
+                $gte: new Date(startDate),
+                $lte: new Date(endDate),
+            },
+        }
+        console.log("<><>query<><>", query)
+        
+        let betsReturn = await Transactions
+        .find(query)
+        .lean()
+        .exec()
+        // console.log("<><>betsReturn<><>", betsReturn)
+        
+        return betsReturn
+    }
 }
