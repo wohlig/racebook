@@ -32,23 +32,71 @@ router.post("/result", async (req, res) => {
     //     if (!SessionModel.checkResultInProcess(reqData.marketId)) {
     //         SessionModel.setResultInProcess(reqData.marketId)
 
+            let marketIds = [];
             async.waterfall(
                 [
                     async (callback) => {
                         let betsData = await TransactionsModel.getBetsForResult()
-                        console.log("betsData ::::: ", betsData)
 
-                        if (!betsData) {
-                            callback("No Bets Found For Result")
-                        } else {
+                        if (betsData && betsData.length > 0) {
+                            // console.log("in waterfall betsData ::::: ", betsData)
                             callback(null, betsData)
+                        } else {
+                            callback("No Bets Found For Result")
                         }
+                    },
+                    (betsData, callback) => {
+                        let mainResultArray = [];
+
+                        async.eachSeries(
+                            betsData,
+                            (markets , cb) => {
+                                // console.log("meetingId ::::: ", markets.meetingId)
+
+                                TransactionsModel.getResults(
+                                    {
+                                        meetingId: markets.meetingId,
+                                        eventNo: markets.eventNo
+                                    },
+                                    (err, data) => {
+                                        // console.log("getResults ::::: ", err, data)
+                                        if (err) {
+                                            cb(err)
+                                        } else {
+                                            marketIds.push(markets.meetingId)
+                                            mainResultArray.push(data)
+                                            cb(null, data)
+                                        }
+                                    }
+                                )
+                            },
+                            (err) => {
+                                if (err) {
+                                    // console.error("async.each ::::: error iss ::::: ", err);
+                                    cb(err)
+                                } else {
+                                    // console.log("---mainResultArray---", mainResultArray)
+                                    callback(null, mainResultArray)
+                                }
+
+                            }
+                        )
+
+                    }, 
+                    async (resultData ,callback) => {
+                        // console.log("^^^^^^^^^resultData^^^^^^^^^", resultData);
+                        // console.log("^^^^^^^^^marketIds^^^^^^^^^", marketIds);
+
+                        let debitData = await TransactionsModel.getMarketIdWiseBets(marketIds)
+                        console.log("debitData :::: ", debitData)
+
+                        callback(null, debitData)
+                        // callback(null, resultData)
                     }
                 ],
                 function(err, finalData) {
-                    console.log("FINAL", finalData)
-                    // SessionModel.removeResultInProcess(reqData.marketId)
-
+                    console.log("FINAL ::::: -> ", finalData)
+                    // SessionModel.removeResultInProcess(reqData.marketId)s
                     res.callback(err, finalData)
                 }
             )

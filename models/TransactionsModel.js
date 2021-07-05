@@ -554,27 +554,81 @@ export default {
         // var a15minAgo = new Date( Date.now() - 15000 * 60 );
         // var travelTime = moment().subtract(15, 'minutes').format('hh:mm A');
 
-        let startDate = moment().subtract(1, "days").startOf("day");
-        let endDate = moment().endOf("day");
-
-        console.log("<><>startDate<><>", startDate)
-        console.log("<><>endDate<><>", endDate)
-
+        // let startDate = moment().subtract(1, "days").startOf("day");
+        // let endDate = moment().endOf("day");
         let query = {
             type: "debit",
             timeOfRaceConvert: {
-                $gte: new Date(startDate),
-                $lte: new Date(endDate),
+                // $gte: new Date(startDate),
+                // $lte: new Date(endDate),
+                '$gte': new Date("2021-06-01T18:30:00.000Z"),
+                '$lte': new Date("2021-06-02T18:29:59.999Z") 
             },
         }
-        console.log("<><>query<><>", query)
         
         let betsReturn = await Transactions
         .find(query)
+        .select("transaction meetingId runnerNo eventNo timeOfRaceConvert timeOfBetConvert")
         .lean()
         .exec()
-        // console.log("<><>betsReturn<><>", betsReturn)
-        
+
+        /* // let betsReturn = await Transactions.distinct('meetingId');
+        let betsReturn = await Transactions.aggregate( 
+            [
+                {
+                    $match : query
+                },
+                {
+                    "$group": { 
+                        "_id": { 
+                            meetingId: "$meetingId", 
+                            eventNo: "$eventNo" 
+                        } 
+                    } 
+                }
+            ]
+        ); */
+
         return betsReturn
+    },
+
+    getResults: (data, callback) => {
+        let options = {
+            method: "GET",
+            url:
+                `https://exchange.rapi.live/api/exchange/results/event/${data.meetingId}/${data.eventNo}`,
+            headers: {
+                accept: "application/json; charset=UTF-8; qs=1"
+            },
+            json: true,
+        };
+        // console.log("options ::::: ->", options);
+      
+        request(options, function (err, response, resData) {
+            // console.log("resData ::::: ->", resData);
+            if (!_.isEmpty(resData)) {
+                try {
+                    callback(null, resData);
+                } catch (e) {
+                    console.log(e);
+                }
+            } else {
+                callback(null, []);
+            }
+        });
+    },
+
+    getMarketIdWiseBets: async (marketIds) => {
+        let queryForBets = {
+            "meetingId" : {
+                $in : marketIds
+            }
+        }
+        let betsData = await Transactions
+        .find(queryForBets)
+        .lean()
+        .exec()
+        
+        return betsData
     }
 }
