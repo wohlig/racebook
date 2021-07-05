@@ -550,6 +550,9 @@ export default {
         )
     },
     
+    /* 
+        gets bets data from timeOfRaceConvert key (means at race start)
+    */
     getBetsForResult: async () => {
         // var a15minAgo = new Date( Date.now() - 15000 * 60 );
         // var travelTime = moment().subtract(15, 'minutes').format('hh:mm A');
@@ -592,6 +595,9 @@ export default {
         return betsReturn
     },
 
+    /* 
+        get result from 3rd party end 
+    */
     getResults: (data, callback) => {
         let options = {
             method: "GET",
@@ -618,6 +624,9 @@ export default {
         });
     },
 
+    /* 
+        get meetingId wise result
+    */
     getMarketIdWiseBets: async (marketIds) => {
         let queryForBets = {
             "meetingId" : {
@@ -626,6 +635,7 @@ export default {
         }
         let betsData = await Transactions
         .find(queryForBets)
+        .select("transaction sid userId currency currency type eventNo meetingId meetingId timeOfBetConvert timeOfRaceConvert")
         .lean()
         .exec()
         
