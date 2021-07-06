@@ -434,7 +434,10 @@ export default {
                     */
                     rate = arg.rate
                     data.type = "credit"
-                    data.subGame = data.game.type
+
+                    if (data && data.game) {
+                        data.subGame = data.game.type ? data.game.type : "racebook"
+                    }
                     data.rate = arg.rate
                     var creditTransaction = new Transactions(data)
                     creditTransaction.save((err, savedData) => {
