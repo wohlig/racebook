@@ -35,6 +35,9 @@ router.post("/result", async (req, res) => {
             let marketIds = [];
             async.waterfall(
                 [
+                    /* 
+                        from race start get bets stored in transaction collection 
+                    */
                     async (callback) => {
                         let betsData = await TransactionsModel.getBetsForResult()
 
@@ -45,11 +48,14 @@ router.post("/result", async (req, res) => {
                             callback("No Bets Found For Result")
                         }
                     },
-                    (betsData, callback) => {
+                    /* 
+                        from that bets need to get result data from 3rd party
+                    */
+                    (bets, callback) => {
                         let mainResultArray = [];
 
                         async.eachSeries(
-                            betsData,
+                            bets,
                             (markets , cb) => {
                                 // console.log("meetingId ::::: ", markets.meetingId)
 
@@ -83,19 +89,26 @@ router.post("/result", async (req, res) => {
                         )
 
                     }, 
-                    async (resultData ,callback) => {
+                    /* 
+                        getting bets data meeting Id wise need to create credit call
+                    */
+                    async (resultData, callback) => { 
                         // console.log("^^^^^^^^^resultData^^^^^^^^^", resultData);
                         // console.log("^^^^^^^^^marketIds^^^^^^^^^", marketIds);
 
-                        let debitData = await TransactionsModel.getMarketIdWiseBets(marketIds)
-                        console.log("debitData :::: ", debitData)
+                        let debitData = await TransactionsModel.getMeetingIdWiseBets(marketIds)
+                        // console.log("debitData :::: ", debitData)
 
                         callback(null, debitData)
                         // callback(null, resultData)
+                    },
+                    (resultForCreditCall, callback) => {
+                        console.log("<><><><>", resultForCreditCall)
+                        callback(null, resultForCreditCall)
                     }
                 ],
                 function(err, finalData) {
-                    console.log("FINAL ::::: -> ", finalData)
+                    // console.log("FINAL ::::: -> ", finalData)
                     // SessionModel.removeResultInProcess(reqData.marketId)s
                     res.callback(err, finalData)
                 }

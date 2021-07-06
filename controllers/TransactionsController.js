@@ -74,6 +74,24 @@ router.post("/balance", (req, res) => {
     }
 })
 
+router.post("/creditNew", (req, res) => {
+    console.log("Credit Call New ::::: ", req.body)
+
+    req.body.frontendUrl = req.headers.origin
+    if (
+        req.body &&
+        req.body.userId
+    ) {
+        console.log("Credit Call ::::: req.body ::::: ", req.body)
+
+        TransactionsModel.creditWalletNew(req.body, res.callback)
+    } else {
+        var responseData = {}
+        responseData.status = "INVALID_TOKEN_ID"
+        res.callback(null, responseData)
+    }
+})
+
 /* 
     router.post("/getBetsForResult", (req, res) => {
         console.log("IN ROUTEEEEEE")
