@@ -435,7 +435,7 @@ export default {
                     rate = arg.rate
                     data.type = "credit"
 
-                    if (data && data.game) {
+                    if (data && data.game) { 
                         data.subGame = data.game.type ? data.game.type : "racebook"
                     }
                     data.rate = arg.rate
