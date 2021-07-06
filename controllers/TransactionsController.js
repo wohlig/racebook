@@ -75,14 +75,14 @@ router.post("/balance", (req, res) => {
 })
 
 router.post("/creditNew", (req, res) => {
-    console.log("Credit Call New ::::: ", req.body)
+    // console.log("Credit Call New ::::: ", req.body)
 
     req.body.frontendUrl = req.headers.origin
     if (
         req.body &&
         req.body.userId
     ) {
-        console.log("Credit Call ::::: req.body ::::: ", req.body)
+        // console.log("Credit Call ::::: req.body ::::: ", req.body)
 
         TransactionsModel.creditWalletNew(req.body, res.callback)
     } else {
