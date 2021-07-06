@@ -71,6 +71,21 @@ var schema = new Schema({
     meetingId : { //
         type: String
     },
+    id: { //
+        type: String
+    },
+    refId: { //
+        type: String
+    },
+    amount: { //
+        type: Number
+    },
+    odds: { //
+        type: Number
+    },
+    bettype: { //
+        type: String
+    },
     type: String, // [debit or credit]
     createdAt: { //
         type: Date,

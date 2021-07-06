@@ -211,9 +211,14 @@ export default {
                                         // keys required outside transaction object
                                         data.timeOfBetConvert = new Date(data.transaction.timeOfBet)
                                         data.timeOfRaceConvert = new Date(data.transaction.timeOfRace)
-                                        data.eventNo = data.transaction.eventNo
-                                        data.runnerNo = data.transaction.runnerNo 
-                                        data.meetingId = data.transaction.meetingId
+                                        data.eventNo = data.transaction.eventNo ? data.transaction.eventNo : ""
+                                        data.runnerNo = data.transaction.runnerNo ? data.transaction.runnerNo : ""
+                                        data.meetingId = data.transaction.meetingId ? data.transaction.meetingId : ""
+                                        data.id = data.transaction.id ? data.transaction.id : ""
+                                        data.refId = data.transaction.refId ? data.transaction.refId : ""
+                                        data.amount = data.transaction.amount ? data.transaction.amount : ""
+                                        data.odds = data.transaction.odds ? data.transaction.odds : ""
+                                        data.bettype = data.transaction.bettype ? data.transaction.bettype : ""
                                     }
 
                                     console.log(
@@ -573,7 +578,7 @@ export default {
         
         let betsReturn = await Transactions
         .find(query)
-        .select("transaction meetingId runnerNo eventNo timeOfRaceConvert timeOfBetConvert")
+        .select("transaction meetingId runnerNo eventNo timeOfRaceConvert timeOfBetConvert id refId amount odds")
         .lean()
         .exec()
 
@@ -637,7 +642,7 @@ export default {
         }
         let betsData = await Transactions
         .find(queryForBets)
-        .select("transaction sid userId currency currency type eventNo meetingId meetingId timeOfBetConvert timeOfRaceConvert")
+        .select("transaction sid userId currency currency type eventNo meetingId meetingId timeOfBetConvert timeOfRaceConvert id refId amount odds")
         .lean()
         .exec()
         
