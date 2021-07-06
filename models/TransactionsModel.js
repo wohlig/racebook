@@ -469,10 +469,10 @@ export default {
                     winAmount = newAmount
                     var obj = {
                         // gameId: data.game._id,
-                        gameId: data.game.id,
+                        // gameId: data.game.id,
                         win: data.transaction.amount,
                         lose: netexposureSum.amount * -1,
-                        subGame: data.game.type,
+                        // subGame: data.game.type,
                         net: 0,
                         url: data.url,
                         _id: data.userId,
@@ -766,7 +766,7 @@ export default {
                         // gameId: data.game.id,
                         win: data.transaction.amount,
                         lose: netexposureSum.amount * -1,
-                        subGame: data.game.type, // 
+                        // subGame: data.game.type, // 
                         net: 0,
                         url: data.url, // 
                         _id: data.userId, // 
