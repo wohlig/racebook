@@ -592,6 +592,7 @@ export default {
         // let startDate = moment().subtract(1, "days").startOf("day");
         // let endDate = moment().endOf("day");
         let query = {
+            // isResult : true
             type: "debit",
             timeOfRaceConvert: {
                 // $gte: new Date(startDate),
@@ -603,7 +604,7 @@ export default {
         
         let betsReturn = await Transactions
         .find(query)
-        .select("transaction meetingId runnerNo eventNo timeOfRaceConvert timeOfBetConvert id refId amount odds bettype")
+        .select("transaction meetingId runnerNo eventNo timeOfRaceConvert timeOfBetConvert id refId amount odds bettype potentialWin potentialLose")
         .lean()
         .exec()
 
@@ -667,7 +668,7 @@ export default {
         }
         let betsData = await Transactions
         .find(queryForBets)
-        .select("transaction sid userId currency currency type eventNo meetingId meetingId timeOfBetConvert timeOfRaceConvert id refId amount odds bettype")
+        .select("transaction sid userId currency currency type eventNo meetingId meetingId timeOfBetConvert timeOfRaceConvert id refId amount odds bettype potentialWin potentialLose")
         .lean()
         .exec()
         
@@ -685,21 +686,6 @@ export default {
         async.waterfall(
             [
                 (callback) => {
-
-                    /* let potentiallose;
-                    let potentialWin;
-                    if (data && data.bettype === "BACK") {
-                        potentialWin = (data.odds - 1) * data.amount
-                    } else {
-                        potentialWin = data.amount
-                    }
-                    
-                    if (data && data.bettype === "BACK") {
-                        potentiallose = data.amount
-                    } else {
-                        potentiallose = (data.odds - 1) * data.amount
-                    } */
-
                     mainCreditObject = {
                         "transaction": {
                             "id": data.id,
