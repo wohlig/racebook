@@ -200,9 +200,25 @@ export default {
                                         "transactions ::::: data ::::: ",
                                         data
                                     )
-                                    
+
                                     if (data.transaction && data.transaction.timeOfBet && data.transaction.timeOfRace) {
                                         console.log("IN DATE ::::: ", data.transaction.timeOfBet, data.transaction.timeOfRace)
+
+                                        if (data.transaction.bettype === "BACK") {
+                                            data.potentialWin = (data.transaction.odds - 1) * data.transaction.amount
+                                            data.transaction.potentialWin = (data.transaction.odds - 1) * data.transaction.amount
+                                        } else {
+                                            data.potentialWin = data.transaction.amount
+                                            data.transaction.potentialWin = data.transaction.amount
+                                        }
+                                        
+                                        if (data.transaction.bettype === "BACK") {
+                                            data.potentialLose = data.transaction.amount
+                                            data.transaction.potentialLose = data.transaction.amount
+                                        } else {
+                                            data.potentialLose = (data.transaction.odds - 1) * data.transaction.amount
+                                            data.transaction.potentialLose = (data.transaction.odds - 1) * data.transaction.amount
+                                        }
 
                                         // add new key for date and bet time inside transaction object
                                         data.transaction.timeOfBetConvert = new Date(data.transaction.timeOfBet)
@@ -669,13 +685,21 @@ export default {
         async.waterfall(
             [
                 (callback) => {
-                    let amount;
+
+                    /* let potentiallose;
+                    let potentialWin;
                     if (data && data.bettype === "BACK") {
-                        amount = (data.odds - 1) * data.amount
+                        potentialWin = (data.odds - 1) * data.amount
                     } else {
-                        amount = data.amount
+                        potentialWin = data.amount
                     }
                     
+                    if (data && data.bettype === "BACK") {
+                        potentiallose = data.amount
+                    } else {
+                        potentiallose = (data.odds - 1) * data.amount
+                    } */
+
                     mainCreditObject = {
                         "transaction": {
                             "id": data.id,

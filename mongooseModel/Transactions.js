@@ -54,7 +54,14 @@ var schema = new Schema({
         },
         runnerNo: {
             type: String
-        }
+        },    
+        potentialWin: {
+            type: Number
+        },
+        potentialLose: {
+            type: Number
+        },
+
     },
     timeOfBetConvert: { //
         type: Date
@@ -85,6 +92,12 @@ var schema = new Schema({
     },
     bettype: { //
         type: String
+    },
+    potentialWin: { //
+        type: Number
+    },
+    potentialLose: { //
+        type: Number
     },
     type: String, // [debit or credit]
     createdAt: { //
