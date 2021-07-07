@@ -215,7 +215,7 @@ export default {
                                         data.eventNo = data.transaction.eventNo ? data.transaction.eventNo : ""
                                         data.runnerNo = data.transaction.runnerNo ? data.transaction.runnerNo : ""
                                         data.meetingId = data.transaction.meetingId ? data.transaction.meetingId : ""
-                                        data.id = data.transaction.id ? "D"+data.transaction.id : ""
+                                        data.id = data.transaction.id
                                         data.refId = data.transaction.refId ? data.transaction.refId : ""
                                         data.amount = data.transaction.amount ? data.transaction.amount : ""
                                         data.odds = data.transaction.odds ? data.transaction.odds : ""
@@ -441,7 +441,7 @@ export default {
                     }
                     if(data && data.transaction) {
                         data.transaction.id = "C"+data.transaction.id
-                        data.id = "C"+data.transaction.id
+                        data.id = data.transaction.id
                     }
 
                     data.rate = arg.rate
@@ -766,7 +766,7 @@ export default {
 
                     if (data.transaction) {
                         data.transaction.id = "C"+data.transaction.id
-                        data.id = "C"+data.transaction.id
+                        data.id = data.transaction.id
                     }
 
                     var creditTransaction = new Transactions(data)
