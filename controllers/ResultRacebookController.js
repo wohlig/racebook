@@ -32,7 +32,6 @@ router.post("/result", async (req, res) => {
     //     if (!SessionModel.checkResultInProcess(reqData.marketId)) {
     //         SessionModel.setResultInProcess(reqData.marketId)
 
-            let marketIds = [];
             async.waterfall(
                 [
                     /* 
@@ -42,7 +41,6 @@ router.post("/result", async (req, res) => {
                         let betsData = await TransactionsModel.getBetsForResult()
 
                         if (betsData && betsData.length > 0) {
-                            // console.log("in waterfall betsData ::::: ", betsData)
                             callback(null, betsData)
                         } else {
                             callback("No Bets Found For Result")
@@ -53,34 +51,36 @@ router.post("/result", async (req, res) => {
                     */
                     (bets, callback) => {
                         // console.log("1st waterfalllllllllll ", bets)
-                        let mainResultArray = [];
 
+                        let mainArray = [] 
                         async.eachSeries(
                             bets,
-                            (markets , cb) => {
-                                // console.log("meetingId ::::: ", markets.meetingId)
+                            (market , cb) => {
+                                // console.log("meetingId ::::: ", market.id)
 
                                 TransactionsModel.getResults(
                                     {
-                                        meetingId: markets.meetingId,
-                                        eventNo: markets.eventNo
+                                        meetingId: market.meetingId,
+                                        eventNo: market.eventNo
                                     },
                                     (err, data) => {
-                                        console.log("getResults ::::: ", err, data)
+                                        console.log("getResults err ::::: ", err)
+                                        console.log("getResults data ::::: ", JSON.stringify(data))
                                         if (data && data.meetings[0] && data.meetings[0].events[0] && data.meetings[0].events[0].finals[0]) {
+
                                             let winnerObj = {
                                                 meetingId: data.meetings[0].meetingId,
                                                 winnerHorse: data.meetings[0].events[0].finals[0].selections
                                             }
-                                            console.log("$$$$$$$$$$$$$$$", winnerObj)
-                                            data.winnerAggregatedData = winnerObj
+                                            // console.log("$$$$$$$$$$$$$$$", winnerObj)
+                                            market.winnerAggregatedData = winnerObj
                                         }
                                     
                                         if (err) {
+                                            // console.log("Err at async.each ::::: ", err)
                                             cb(err)
                                         } else {
-                                            // marketIds.push(markets.meetingId)
-                                            mainResultArray.push(data)
+                                            mainArray.push(market)
                                             cb(null, data)
                                         }
                                     }
@@ -91,36 +91,26 @@ router.post("/result", async (req, res) => {
                                     // console.error("async.each ::::: error iss ::::: ", err);
                                     cb(err)
                                 } else {
-                                    // console.log("---mainResultArray---", mainResultArray)
-                                    callback(null, mainResultArray)
+                                    // console.log("mainArray ::::: ", mainArray)
+                                    callback(null, mainArray)
                                 }
 
                             }
                         )
 
                     }, 
-                    // /* 
-                    //     getting bets data meeting Id wise need to create credit call
-                    // */
-                    // async (resultData, callback) => { 
-                    //     console.log("2nd waterfalllllllllll ", resultData)
-                    //     // console.log("^^^^^^^^^resultData^^^^^^^^^", resultData);
-                    //     // console.log("^^^^^^^^^marketIds^^^^^^^^^", marketIds);
-
-                    //     let debitData = await TransactionsModel.getMeetingIdWiseBets(marketIds)
-                    //     // console.log("debitData :::: ", debitData)
-
-                    //     callback(null, debitData)
-                    //     // callback(null, resultData)
-                    // },
+                    /* 
+                        new credit api call for result
+                        async.each needed for multiple credit calls 
+                    */
                     (resultForCreditCall, callback) => {
-                        console.log("3rd waterfalllllllllll ", resultForCreditCall)
+                        // console.log("2nd waterfalllllllllll ", resultForCreditCall)
                         callback(null, resultForCreditCall)
                     }
                 ],
                 function(err, finalData) {
                     // console.log("FINAL ::::: -> ", finalData)
-                    // SessionModel.removeResultInProcess(reqData.marketId)s
+                    // SessionModel.removeResultInProcess(reqData.marketId)
                     res.callback(err, finalData)
                 }
             )
