@@ -4,6 +4,7 @@ export default {
         description: 
     */
     GetNetExpoByuser: (data, callback) => {
+        console.log("GetNetExpoByuser ::::: data ::::: ", data)
         var query = {}
         if (!data.url) {
             callback("URL Missing")
@@ -31,6 +32,8 @@ export default {
                     }
                 }
             ]).exec((err, netExposureData) => {
+                console.log("GetNetExpoByuser ::::: responseeeeeee ::::: ", err, netExposureData)
+
                 if (err) {
                     callback(err)
                 } else {
@@ -48,6 +51,7 @@ export default {
                             netExposureData
                         )
                     } else {
+                        console.log("GetNetExpoByuser ::::: IN ELSEEEEEEEEEE")
                         netExposureData = [{}]
                         netExposureData[0].amount = 0
                     }
@@ -58,6 +62,7 @@ export default {
     },
 
     GetNetExposureByUser: (data, callback) => {
+        console.log("GetNetExposureByUser data ::::: ")
         var query = {}
         if (!data.url) {
             callback("URL Missing")
@@ -88,6 +93,7 @@ export default {
                     }
                 }
             ]).exec((err, netExposureData) => {
+                console.log("GetNetExposureByUser ::::: ", err, netExposureData)
                 if (err) {
                     callback(err)
                 } else {

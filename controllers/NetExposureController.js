@@ -8,6 +8,7 @@ const router = Router()
 */
 router.post("/racebookExposureCall", (req, res) => {
     if (req.body) {
+        console.log("racebookExposureCall frpm userrrrrrrr", req.body);
         NetExposureModel.GetNetExpoByuser(req.body, res.callback)
     } else {
         // console.log("Body not set for racebookExposureCall ", req.body)
