@@ -237,6 +237,7 @@ export default {
                                         data.odds = data.transaction.odds ? data.transaction.odds : ""
                                         data.bettype = data.transaction.bettype ? data.transaction.bettype : ""
                                     }
+                                    data.resultDeclare = false
 
                                     console.log(
                                         "transactions ::::: data ::::: after conversion ::::: ",
@@ -370,6 +371,7 @@ export default {
         console.log("creditWallet ::::: data ::::: ", data)
 
         var rate
+        var meetId = data.transaction.id;
         async.waterfall(
             [
                 (callback) => {
@@ -461,6 +463,8 @@ export default {
                     }
 
                     data.rate = arg.rate
+                    data.resultDeclare = true
+
                     var creditTransaction = new Transactions(data)
                     creditTransaction.save((err, savedData) => {
                         console.log(
@@ -472,7 +476,28 @@ export default {
                             responseData.status = "UNKNOWN_ERROR"
                             callback(err, responseData)
                         } else if (savedData) {
-                            callback(null, "saved")
+
+                            Transactions.findOneAndUpdate(
+                                {
+                                    type: "debit",
+                                    meetingId: meetId
+                                }, {
+                                    $set: {
+                                        resultDeclare : true
+                                    }
+                                }, (err, resData) => {
+                                    console.log("RESULT UPDATE AT DEBIT CALL ::::: ", null, resData)
+                                    if (err) {
+                                        console.log("error in updating result key from debit entry ", +meetId)
+                                        callback(err, responseData)
+                                    } else {
+                                        console.log("result key updated successfully ", +meetId)
+                                        callback(null, "saved")
+                                    }
+                                }
+                            )
+
+                            // callback(null, "saved")
                         }
                     })
                 },

@@ -99,6 +99,9 @@ var schema = new Schema({
     potentialLose: { //
         type: Number
     },
+    resultDeclare: { //
+        type: Boolean
+    },
     type: String, // [debit or credit]
     createdAt: { //
         type: Date,
