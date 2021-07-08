@@ -64,15 +64,14 @@ router.post("/result", async (req, res) => {
                                         eventNo: market.eventNo
                                     },
                                     (err, data) => {
-                                        console.log("getResults err ::::: ", err)
-                                        console.log("getResults data ::::: ", JSON.stringify(data))
+                                        // console.log("getResults data ::::: ", err, JSON.stringify(data))
                                         if (data && data.meetings[0] && data.meetings[0].events[0] && data.meetings[0].events[0].finals[0]) {
 
                                             let winnerObj = {
                                                 meetingId: data.meetings[0].meetingId,
                                                 winnerHorse: data.meetings[0].events[0].finals[0].selections
                                             }
-                                            // console.log("$$$$$$$$$$$$$$$", winnerObj)
+                                            // console.log("$$$$$$$$winnerObj$$$$$$$", winnerObj)
                                             market.winnerAggregatedData = winnerObj
                                         }
                                     
