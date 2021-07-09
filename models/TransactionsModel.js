@@ -479,7 +479,7 @@ export default {
 
                             console.log("Update Debit Documents ::::: ", {
                                 type: "debit",
-                                meetingId: refIdKey
+                                meetingId: refIdKey 
                             })
                             Transactions.update(
                                 {
