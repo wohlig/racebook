@@ -743,35 +743,40 @@ export default {
             "type" : "debit"
         }
 
-        Transactions.find(query).exec( (err, betsResult) => {
-            // console.log(
-            //     "Bets Resulttttttttttt ",
-            //     err,
-            //     betsResult
-            // )
+        Transactions.find(query).lean().exec( (err, betsResult) => {
+            console.log(
+                "Bets Resulttttttttttt ",
+                err,
+                betsResult
+            )
             if (err) {
                 callback(err, [])
             } else {
-                // let mainObjToSend = {}
-                // let arrOfBets = []
-                // forEach(betsResult, function (item) {
-                //     mainObjToSend._id = {
-                //         "marketId": item.meetingId,
-                //         "event": item.eventNo,
-                //         "status": "OPEN"
-                //     },
-                //     arrOfBets.push(item)
-                // })
-                // mainObjToSend.betsData = arrOfBets
-                // mainObjToSend.count = 1
-                // mainObjToSend.average = arrOfBets
+                if (betsResult && betsResult.length > 0) {
+                    let mainArray = []
+                    forEach(betsResult, function (item) {
+                        delete item._id
+                        delete item.transaction
+                        delete item.transactionSentToMainServer
+                        delete item.bets
 
-                // console.log("mainObjToSend ::::::::: ", mainObjToSend)
-
-                // callback(null, mainObjToSend)
-
-
-                callback(null, betsResult)
+                        let newObj = {}
+                        newObj._id = {
+                            "marketId": item.meetingId,
+                            "event": item.eventNo,
+                            "status": "OPEN"
+                        },
+                        newObj.count = 1,
+                        newObj.betData = [item]
+                        newObj.average = [item]
+    
+                        mainArray.push(newObj)
+                    })
+    
+                    callback(null, mainArray)
+                } else {
+                    callback(null, [])
+                }
             }
         })
     },
