@@ -92,6 +92,11 @@ router.post("/creditNew", (req, res) => {
     }
 })
 
+router.post("/getOpenBets", (req, res) => {
+    // console.log("IN ROUTEEEEEE", req.body)
+    TransactionsModel.getOpenBets(req.body, res.callback);
+})
+
 /* 
     router.post("/getBetsForResult", (req, res) => {
         console.log("IN ROUTEEEEEE")

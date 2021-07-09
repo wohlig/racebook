@@ -1,3 +1,5 @@
+import { forEach } from "async"
+
 export default {
 
     /* 
@@ -732,6 +734,46 @@ export default {
         .exec()
         
         return betsData
+    },
+
+    getOpenBets: (data, callback) => {
+        let query = {
+            "userId" : ObjectId(data.playerId),
+            "resultDeclare" : false,
+            "type" : "debit"
+        }
+
+        Transactions.find(query).exec( (err, betsResult) => {
+            // console.log(
+            //     "Bets Resulttttttttttt ",
+            //     err,
+            //     betsResult
+            // )
+            if (err) {
+                callback(err, [])
+            } else {
+                // let mainObjToSend = {}
+                // let arrOfBets = []
+                // forEach(betsResult, function (item) {
+                //     mainObjToSend._id = {
+                //         "marketId": item.meetingId,
+                //         "event": item.eventNo,
+                //         "status": "OPEN"
+                //     },
+                //     arrOfBets.push(item)
+                // })
+                // mainObjToSend.betsData = arrOfBets
+                // mainObjToSend.count = 1
+                // mainObjToSend.average = arrOfBets
+
+                // console.log("mainObjToSend ::::::::: ", mainObjToSend)
+
+                // callback(null, mainObjToSend)
+
+
+                callback(null, betsResult)
+            }
+        })
     },
 
     /* 
