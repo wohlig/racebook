@@ -1,7 +1,7 @@
 export default {
     /* 
         author: Siddhesh Salunkhe
-        description: 
+        description: getting overall exposure
     */
     GetNetExpoByuser: (data, callback) => {
         console.log("GetNetExpoByuser ::::: data ::::: ", data)
@@ -61,6 +61,10 @@ export default {
         }
     },
 
+    /* 
+        author: Siddhesh Salunkhe
+        description: getting refId wise exposure
+    */
     GetNetExposureByUser: (data, callback) => {
         console.log("GetNetExposureByUser data ::::: ", data)
 
@@ -121,6 +125,10 @@ export default {
         }
     },
 
+    /* 
+        author: Siddhesh Salunkhe
+        description: update netexposure status after credit call
+    */
     updateNetExposure: (data, callback) => {
         console.log("updateNetExposure ::::: queryyyyyyyyyy ::::: ", {
             userId: data.userId,
