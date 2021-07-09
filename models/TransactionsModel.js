@@ -67,7 +67,8 @@ export default {
                     */
                     console.log("debitWallet ::::: Waterfall 3---->>", arg1)
                     
-                    NetExposureModel.GetNetExpoByuser(data, (err, exposure) => {
+                    // sNetExposureModel.GetNetExpoByuser(data, (err, exposure) => {
+                    NetExposureModel.GetNetExposureByUser(data, (err, exposure) => {
                         if (err) {
                             callback(err)
                         } else {
