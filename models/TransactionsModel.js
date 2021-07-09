@@ -483,7 +483,7 @@ export default {
                         data.runnerNo = data.transaction.runnerNo ? data.transaction.runnerNo : ""
                         data.meetingId = data.transaction.meetingId ? data.transaction.meetingId : ""
                         data.id = data.transaction.id
-                        data.refId = data.transaction.refId ? data.transaction.refId : ""
+                        data.refId = refIdKey ? refIdKey : ""
                         data.amount = data.transaction.amount ? data.transaction.amount : ""
                         data.odds = data.transaction.odds ? data.transaction.odds : ""
                         data.bettype = data.transaction.bettype ? data.transaction.bettype : ""
