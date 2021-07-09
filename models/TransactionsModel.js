@@ -457,10 +457,42 @@ export default {
                     if (data && data.game) { 
                         data.subGame = data.game.type ? data.game.type : "racebook"
                     }
-                    if(data && data.transaction) {
-                        data.transaction.id = "C"+data.transaction.id
+                    if(data && data.transaction && data.transaction.timeOfBet && data.transaction.timeOfRace) {
                         data.id = data.transaction.id
-                    }
+                        data.transaction.id = "C"+data.transaction.id
+
+                        //
+                        data.transaction.refId = refIdKey
+                        data.transaction.amount = data.transaction.amount ? data.transaction.amount : 0,
+                        data.transaction.odds = data.transaction.odds ? data.transaction.odds : 0,
+                        data.transaction.bettype = data.transaction.bettype ? data.transaction.bettype : "",
+                        data.transaction.timeOfBet = data.transaction.timeOfBet,
+                        data.transaction.timeOfRace = data.transaction.timeOfRace,
+                        data.transaction.runnerName = data.transaction.runnerName ? data.transaction.runnerName : "",
+                        data.transaction.meetingName = data.transaction.meetingName ? data.transaction.meetingName : "",
+                        data.transaction.meetingId = data.transaction.meetingId ? data.transaction.meetingId : "",
+                        data.transaction.eventNo = data.transaction.eventNo ? data.transaction.eventNo : "",
+                        data.transaction.runnerNo = data.transaction.runnerNo ? data.transaction.runnerNo : "",
+                        data.transaction.potentialWin = data.transaction.potentialWin ? data.transaction.potentialWin : 0,
+                        data.transaction.potentialLose = data.transaction.potentialLose ? data.transaction.potentialLose : 0,
+                        data.transaction.timeOfBetConvert = new Date(data.transaction.timeOfBet),
+                        data.transaction.timeOfRaceConvert = new Date(data.transaction.timeOfRace)
+
+                        // keys required outside transaction object
+                        data.timeOfBetConvert = new Date(data.transaction.timeOfBet)
+                        data.timeOfRaceConvert = new Date(data.transaction.timeOfRace)
+                        data.eventNo = data.transaction.eventNo ? data.transaction.eventNo : ""
+                        data.runnerNo = data.transaction.runnerNo ? data.transaction.runnerNo : ""
+                        data.meetingId = data.transaction.meetingId ? data.transaction.meetingId : ""
+                        data.id = data.transaction.id
+                        data.refId = data.transaction.refId ? data.transaction.refId : ""
+                        data.amount = data.transaction.amount ? data.transaction.amount : ""
+                        data.odds = data.transaction.odds ? data.transaction.odds : ""
+                        data.bettype = data.transaction.bettype ? data.transaction.bettype : ""
+                        data.potentialWin = data.transaction.potentialWin ? data.transaction.potentialWin : 0
+                        data.potentialLose = data.transaction.potentialLose ? data.transaction.potentialLose : 0
+                    }                    
+                    
 
                     data.rate = arg.rate
                     data.resultDeclare = true
@@ -479,7 +511,7 @@ export default {
 
                             console.log("Update Debit Documents ::::: ", {
                                 type: "debit",
-                                meetingId: refIdKey 
+                                refId: refIdKey 
                             })
                             Transactions.update(
                                 {
@@ -508,6 +540,7 @@ export default {
                 (transactionData, callback) => {
                     // Diff of Credit And Debit-> Kings User we will send this data
                     // Account Statement ->
+                    data.checkRefId = true; // for checking
                     NetExposureModel.GetNetExposureByUser(data, callback)
                 },
                 (netexposureSum, callback) => {

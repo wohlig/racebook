@@ -62,7 +62,8 @@ export default {
     },
 
     GetNetExposureByUser: (data, callback) => {
-        console.log("GetNetExposureByUser data ::::: ")
+        console.log("GetNetExposureByUser data ::::: ", data)
+
         var query = {}
         if (!data.url) {
             callback("URL Missing")
@@ -78,7 +79,7 @@ export default {
             if (data.transaction && data.transaction.refId) {
                 query.refId = data.transaction.refId
             }
-            console.log("GetNetExposureByUser ::::: query ::::: ", query)
+            console.log("GetNetExposureByUser ::::: query ::::: ********* ", query)
 
             NetExposure.aggregate([
                 {
