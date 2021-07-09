@@ -371,7 +371,7 @@ export default {
         console.log("creditWallet ::::: data ::::: ", data)
 
         var rate
-        var meetId = data.transaction.id;
+        var refIdKey = data.transaction.refId;
         async.waterfall(
             [
                 (callback) => {
@@ -477,21 +477,25 @@ export default {
                             callback(err, responseData)
                         } else if (savedData) {
 
-                            Transactions.findOneAndUpdate(
+                            console.log("Update Debit Documents ::::: ", {
+                                type: "debit",
+                                meetingId: meetId
+                            })
+                            Transactions.update(
                                 {
                                     type: "debit",
-                                    meetingId: meetId
-                                }, {
-                                    $set: {
-                                        resultDeclare : true
-                                    }
-                                }, (err, resData) => {
+                                    refId: refIdKey
+                                }, 
+                                {
+                                    resultDeclare : true
+                                }, 
+                                (err, resData) => {
                                     console.log("RESULT UPDATE AT DEBIT CALL ::::: ", null, resData)
                                     if (err) {
-                                        console.log("error in updating result key from debit entry ", +meetId)
+                                        console.log("error in updating result key from debit entry ", +refIdKey)
                                         callback(err, responseData)
                                     } else {
-                                        console.log("result key updated successfully ", +meetId)
+                                        console.log("result key updated successfully ", +refIdKey)
                                         callback(null, "saved")
                                     }
                                 }
