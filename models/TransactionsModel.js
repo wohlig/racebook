@@ -473,8 +473,6 @@ export default {
                         data.transaction.meetingId = data.transaction.meetingId ? data.transaction.meetingId : "",
                         data.transaction.eventNo = data.transaction.eventNo ? data.transaction.eventNo : "",
                         data.transaction.runnerNo = data.transaction.runnerNo ? data.transaction.runnerNo : "",
-                        data.transaction.potentialWin = data.transaction.potentialWin ? data.transaction.potentialWin : 0,
-                        data.transaction.potentialLose = data.transaction.potentialLose ? data.transaction.potentialLose : 0,
                         data.transaction.timeOfBetConvert = new Date(data.transaction.timeOfBet),
                         data.transaction.timeOfRaceConvert = new Date(data.transaction.timeOfRace)
 
@@ -489,8 +487,6 @@ export default {
                         data.amount = data.transaction.amount ? data.transaction.amount : ""
                         data.odds = data.transaction.odds ? data.transaction.odds : ""
                         data.bettype = data.transaction.bettype ? data.transaction.bettype : ""
-                        data.potentialWin = data.transaction.potentialWin ? data.transaction.potentialWin : 0
-                        data.potentialLose = data.transaction.potentialLose ? data.transaction.potentialLose : 0
                     }                    
                     
 
