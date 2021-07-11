@@ -76,9 +76,9 @@ export default {
                 userId: ObjectId(data.userId),
                 status: "pending",
                 url: data.url,
-                createdAt: {
-                    $gte: moment().subtract(10, "minutes").toDate()
-                }
+                // createdAt: {
+                //     $gte: moment().subtract(10, "minutes").toDate()
+                // }
             }
             if (data.transaction && data.transaction.refId) {
                 query.refId = data.transaction.refId

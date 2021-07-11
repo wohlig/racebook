@@ -789,10 +789,21 @@ export default {
 
         var rate
         var mainCreditObject = {}
+        var amount
+        var refIdKey = data.transaction.refId;
+
         async.waterfall(
-            [
+            [   
                 (callback) => {
-                    let amount
+                    /* 
+                        user session exist
+                    */
+                    SessionsModel.sessionExists(data, callback)
+                },
+                (newData, callback) => {
+                    console.log("URLLLL ::::::::::::: ", newData.url)
+                    data.url = newData.url
+
                     if (data && data.runnerNo) {
                         if (data.runnerNo === data.winnerAggregatedData.winnerHorse) {
                             console.log("winnnnnnnnnnnerrrrrrrr")
@@ -822,19 +833,47 @@ export default {
 
                 },
                 (creditObj, callback) => {
-                    console.log("creditObj beforeeeeeee ::::: ", creditObj)
-                    // rate = creditObj.rate
-                    // creditObj.subGame = data.game.type
-                    // creditObj.rate = creditObj.rate
-                    creditObj.type = "credit"
+                    console.log("data beforeeeeeee ::::: ",creditObj ,data)
+                    // rate = data.rate
+                    // data.subGame = data.game.type
+                    // data.rate = data.rate
+                    data.type = "credit"
                     
-                    if (creditObj.transaction) {
-                        creditObj.transaction.id = "C"+ creditObj.transaction.id.slice(1);
-                        creditObj.id = creditObj.transaction.id
-                    }
-                    console.log("creditObj afterrrrrrr  ::::: ", creditObj)
+                    if (data.transaction && data.transaction.id) {
+                        data.transaction.id = "C"+ data.transaction.id.slice(1);
+                        data.id = data.transaction.id
 
-                    var creditTransaction = new Transactions(creditObj)
+                        //
+                        data.transaction.refId = refIdKey
+                        data.transaction.amount = data.transaction.amount ? data.transaction.amount : 0,
+                        data.transaction.odds = data.transaction.odds ? data.transaction.odds : 0,
+                        data.transaction.bettype = data.transaction.bettype ? data.transaction.bettype : "",
+                        data.transaction.timeOfBet = data.transaction.timeOfBet,
+                        data.transaction.timeOfRace = data.transaction.timeOfRace,
+                        data.transaction.runnerName = data.transaction.runnerName ? data.transaction.runnerName : "",
+                        data.transaction.meetingName = data.transaction.meetingName ? data.transaction.meetingName : "",
+                        data.transaction.meetingId = data.transaction.meetingId ? data.transaction.meetingId : "",
+                        data.transaction.eventNo = data.transaction.eventNo ? data.transaction.eventNo : "",
+                        data.transaction.runnerNo = data.transaction.runnerNo ? data.transaction.runnerNo : "",
+                        data.transaction.timeOfBetConvert = new Date(data.transaction.timeOfBet),
+                        data.transaction.timeOfRaceConvert = new Date(data.transaction.timeOfRace)
+
+                        // keys required outside transaction object
+                        data.timeOfBetConvert = new Date(data.transaction.timeOfBet)
+                        data.timeOfRaceConvert = new Date(data.transaction.timeOfRace)
+                        data.eventNo = data.transaction.eventNo ? data.transaction.eventNo : ""
+                        data.runnerNo = data.transaction.runnerNo ? data.transaction.runnerNo : ""
+                        data.meetingId = data.transaction.meetingId ? data.transaction.meetingId : ""
+                        data.id = data.transaction.id
+                        data.refId = refIdKey ? refIdKey : ""
+                        data.amount = data.transaction.amount ? data.transaction.amount : ""
+                        data.odds = data.transaction.odds ? data.transaction.odds : ""
+                        data.bettype = data.transaction.bettype ? data.transaction.bettype : ""
+                    }
+                    data.resultDeclare = true
+                    console.log("data afterrrrrrr  ::::: ", data)
+
+                    var creditTransaction = new Transactions(data)
                     console.log("creditTransaction ::::: ", creditTransaction)
 
                     creditTransaction.save((err, savedData) => {
@@ -847,108 +886,137 @@ export default {
                             responseData.status = "UNKNOWN_ERROR"
                             callback(err, responseData)
                         } else if (savedData) {
-                            callback(null, creditObj)
+                            
+                            console.log("Update Debit Documents ::::: ", {
+                                type: "debit",
+                                refId: refIdKey 
+                            })
+                            Transactions.update(
+                                {
+                                    type: "debit",
+                                    refId: refIdKey
+                                }, 
+                                {
+                                    resultDeclare : true
+                                }, 
+                                (err, resData) => {
+                                    console.log("RESULT UPDATE AT DEBIT CALL ::::: ", null, resData)
+                                    if (err) {
+                                        console.log("error in updating result key from debit entry ", +refIdKey)
+                                        callback(err, responseData)
+                                    } else {
+                                        console.log("result key updated successfully ", +refIdKey)
+                                        callback(null, "saved")
+                                    }
+                                }
+                            )
                         }
                     })
                 },
-                (transactionDataCheck, callback) => {
-                    console.log("transactionDataCheck ::: ", transactionDataCheck)
-                    NetExposureModel.GetNetExposureByUser(transactionDataCheck, callback)
+                (transactionData, callback) => {
+                    console.log("NET EXPOOOOOOOO CALL ::::: ", data)
+                    NetExposureModel.GetNetExposureByUser(data, callback)
                 },
-                // (netexposureSum, callback) => {
-                //     console.log(
-                //         "creditWallet ::::: 5 waterfall ::::: ",
-                //         netexposureSum
-                //     )
-                //     return;
-
-                //     // var winAmount, loseAmount, newAmount
-                //     // winAmount = newAmount
-                //     // var obj = {
-                //     //     // gameId: data.game._id,
-                //     //     // gameId: data.game.id,
-                //     //     win: mainCreditObject.transaction.amount,
-                //     //     lose: netexposureSum.amount * -1,
-                //     //     // subGame: data.game.type, // 
-                //     //     net: 0,
-                //     //     url: data.url, // 
-                //     //     _id: data.userId, // 
-                //     //     account: data
-                //     // }
-                //     // console.log("creditWallet ::::: obj ::::: ", obj)
-                //     // console.log(
-                //     //     " obj.win + obj.lose",
-                //     //     parseInt(obj.win) - obj.lose
-                //     // )
-
-                //     // request.post(
-                //     //     {
-                //     //         // url: obj.url + "AR/createAccountStatement",
-                //     //         url: obj.url + "Racebook/createAccountStatement",
-                //     //         // url:
-                //     //         //     "http://localhost:1339/Api/Racebook/createAccountStatement",
-                //     //         body: obj,
-                //     //         json: true
-                //     //     },
-                //     //     (error, response, body) => {
-                //     //         console.log(
-                //     //             "Afterrrrrrrrr create account statement ::::: ",
-                //     //             data.transaction.refId
-                //     //         )
-
-                //     //         if (error) {
-                //     //             console.log(
-                //     //                 "CREDIT::account stmt. response---",
-                //     //                 body,
-                //     //                 "OBJ----",
-                //     //                 obj
-                //     //             )
-                //     //         }
-                //     //         Transactions.update(
-                //     //             {
-                //     //                 "transaction.refId": data.transaction.refId,
-                //     //                 type: "credit"
-                //     //             },
-                //     //             {
-                //     //                 $set: {
-                //     //                     winLoseAmt: parseInt(obj.win) - obj.lose
-                //     //                 }
-                //     //             },
-                //     //             {
-                //     //                 multi: true
-                //     //             }
-                //     //         ).exec((err, result) => {
-                //     //             console.log(
-                //     //                 "credit transaction update ERR----->",
-                //     //                 err,
-                //     //                 result
-                //     //             )
-                //     //             callback()
-                //     //         })
-                //     //     }
-                //     // )
-                // },
-                // (callback) => {
-                //     // change NetExposureStatus of Same RefId
-                //     NetExposureModel.updateNetExposure(data, callback)
-                // },
-                // (userDetail, callback) => {
-                //     console.log('creditWallet ::::: userDetail ::::: ', userDetail);
+                (netexposureSum, callback) => {
+                    console.log(
+                        "creditWallet ::::: 5 waterfall ::::: ",
+                        netexposureSum
+                    )
+ 
+                    var winAmount, loseAmount, newAmount
+                    winAmount = newAmount
+                    var obj = {
+                        // gameId: data.game._id,
+                        // gameId: data.game.id,
+                        win: amount,
+                        lose: netexposureSum.amount * -1,
+                        // subGame: data.game.type, // 
+                        net: 0,
+                        url: data.url, // 
+                        _id: data.userId, // 
+                        account: data
+                    }
+                    console.log("creditWallet ::::: obj ::::: ", obj)
                     
-                //     SessionsModel.balanceWallet(data, (err, userData) => {
-                //         console.log('creditWallet ::::: userDetail ::::: ', userData);
-                //         if (err) {
-                //             var responseData = {}
-                //             responseData.status = "INVALID_PARAMETER"
-                //             callback(null, responseData)
-                //         } else {
-                //             callback(null, userData)
-                //         }
-                //     })
-                // }
+                    console.log(
+                        " obj.win + obj.lose",
+                        parseInt(obj.win) - obj.lose
+                    )
+
+                    // callback(null, obj)
+
+                    request.post(
+                        {
+                            // url: obj.url + "AR/createAccountStatement",
+                            // url: obj.url + "Racebook/createAccountStatement",
+                            url:
+                                "http://localhost:1339/Api/Racebook/createAccountStatement",
+                            body: obj,
+                            json: true
+                        },
+                        (error, response, body) => {
+                            console.log(
+                                "Afterrrrrrrrr create account statement ::::: ",
+                                data.transaction.refId
+                            )
+
+                            if (error) {
+                                console.log(
+                                    "CREDIT::account stmt. response---",
+                                    body,
+                                    "OBJ----",
+                                    obj
+                                )
+                            }
+                            
+                            Transactions.update(
+                                {
+                                    "transaction.refId": data.transaction.refId,
+                                    type: "credit"
+                                },
+                                {
+                                    $set: {
+                                        winLoseAmt: parseInt(obj.win) - obj.lose
+                                    }
+                                },
+                                {
+                                    multi: true
+                                }
+                            ).exec((err, result) => {
+                                console.log(
+                                    "credit transaction update ERR----->",
+                                    err,
+                                    result
+                                )
+                                callback()
+                            })
+                        }
+                    )
+                },
+                (callback) => {
+                    // change NetExposureStatus of Same RefId
+                    console.log("updateNnetExposure ::::: ", data)
+                    NetExposureModel.updateNetExposure(data, callback)
+                },
+                (userDetail, callback) => {
+                    console.log('creditWallet ::::: userDetail ::::: ', userDetail);
+                    data.uuid = data.sid
+                    console.log('creditWallet ::::: dataaaaaaaaaaaaaaa ::::: ', data);
+
+                    SessionsModel.balanceWallet(data, (err, userData) => {
+                        console.log('creditWallet ::::: userData ::::: ', userData);
+                        if (err) {
+                            var responseData = {}
+                            responseData.status = "INVALID_PARAMETER"
+                            callback(null, responseData)
+                        } else {
+                            callback(null, userData)
+                        }
+                    })
+                }
             ],
             (err, result) => {
-                // console.log("MAIN RESULTTTTT CREDIT CALL ::::: result ::::: ", result);
+                console.log("MAIN RESULTTTTT CREDIT CALL ::::: result ::::: ", result);
                 if (err) {
                     callback(null, result)
                 } else {
