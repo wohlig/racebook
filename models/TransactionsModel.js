@@ -756,7 +756,7 @@ export default {
 
         Transactions.
         find(query).
-        select("id timeOfBetConvert odds amount meetingId runnerNo eventNo createdAt bettype").
+        select("id timeOfBetConvert odds amount meetingId meetingName runnerName runnerNo eventNo createdAt bettype").
         lean().
         exec( (err, betsResult) => {
             console.log(
