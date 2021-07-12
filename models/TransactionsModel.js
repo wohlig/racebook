@@ -769,8 +769,10 @@ export default {
                         item.betRate = item.odds
                         item.stake = item.amount
                         item.marketId = item.meetingId
-                        item.horse = item.runnerNo
-                        item.event = item.eventNo
+                        // item.horse = item.runnerNo
+                        // item.event = item.eventNo
+                        item.horse = item.runnerName
+                        item.event = item.meetingName
                         item.marketName = item.meetingId
                         item.status = "EXECUTION_COMPLETE"
                         item.betfairId = item.meetingId
@@ -785,7 +787,8 @@ export default {
                         let newObj = {}
                         newObj._id = {
                             "marketId": item.meetingId,
-                            "event": item.eventNo,
+                            // "event": item.eventNo,
+                            "event": item.meetingName,
                             "status": "EXECUTION_COMPLETE"
                         },
                         newObj.count = 1,
