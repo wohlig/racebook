@@ -5,6 +5,11 @@ export default {
         description: Check sessions by session id and status
     */
     sessionExists: (data, callback) => {
+        console.log("data for session queryyyyyyyy ::::: ", {
+            sessionId: data.sid,
+            status: "Active"
+        })
+
         Sessions.findOne(
             {
                 sessionId: data.sid,
@@ -23,7 +28,8 @@ export default {
                 console.log("sessionExists ::::: found ::::: ", found)
                 console.log("sessionExists ::::: found.userId ::::: ", found.userId, data.userId);
 
-                if (found.userId + "" == data.userId + "") {
+                if (found.userId) {
+                // if (found.userId + "" == data.userId + "") {
                     var responseData = {}
                     responseData.status = "OK"
                     responseData.url = found.url ? found.url : ""

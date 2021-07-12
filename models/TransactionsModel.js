@@ -658,8 +658,10 @@ export default {
             timeOfRaceConvert: {
                 // $gte: new Date(startDate),
                 // $lte: new Date(endDate),
-                '$gte': new Date("2021-06-01T18:30:00.000Z"),
-                '$lte': new Date("2021-06-02T18:29:59.999Z") 
+                // '$gte': new Date("2021-06-01T18:30:00.000Z"),
+                // '$lte': new Date("2021-06-02T18:29:59.999Z") 
+                '$gte': new Date("2021-07-11T18:30:00.000Z"),
+                '$lte': new Date("2021-07-12T18:29:59.999Z") 
             },
         }
         
@@ -742,8 +744,13 @@ export default {
             "resultDeclare" : false,
             "type" : "debit"
         }
+        console.log("query ::::---- ", query)
 
-        Transactions.find(query).lean().exec( (err, betsResult) => {
+        Transactions.
+        find(query).
+        select("id timeOfBetConvert odds amount meetingId runnerNo eventNo createdAt bettype").
+        lean().
+        exec( (err, betsResult) => {
             console.log(
                 "Bets Resulttttttttttt ",
                 err,
@@ -756,15 +763,30 @@ export default {
                     let mainArray = []
                     forEach(betsResult, function (item) {
                         delete item._id
-                        delete item.transaction
-                        delete item.transactionSentToMainServer
-                        delete item.bets
+
+                        item.betId = item.id
+                        item.placedDate = item.timeOfBetConvert
+                        item.betRate = item.odds
+                        item.stake = item.amount
+                        item.marketId = item.meetingId
+                        item.horse = item.runnerNo
+                        item.event = item.eventNo
+                        item.marketName = item.meetingId
+                        item.status = "EXECUTION_COMPLETE"
+                        item.betfairId = item.meetingId
+                        item.createdAt = item.createdAt
+                        item.type = item.bettype
+                        item.averagePriceMatched = item.odds
+                        item.eventType = "Racebook"
+                        item.betType = "Racebook"
+                        item.parentCategory = {}
+                        item.placeBetCalcType = ""
 
                         let newObj = {}
                         newObj._id = {
                             "marketId": item.meetingId,
                             "event": item.eventNo,
-                            "status": "OPEN"
+                            "status": "EXECUTION_COMPLETE"
                         },
                         newObj.count = 1,
                         newObj.betData = [item]

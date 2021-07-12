@@ -103,12 +103,51 @@ router.post("/result", async (req, res) => {
                         async.each needed for multiple credit calls 
                     */
                     (resultForCreditCall, callback) => {
+                        /* 
+                            call result function as per bets
+                        */
+                        
+                        let resultComesFromCreditCall = []
+
+                        async.eachSeries(
+                            resultForCreditCall,
+                            (resObj, cb1) => {
+                                console.log("<><><resObj><><>", resObj)
+
+                                delete resObj._id
+
+                                TransactionsModel.creditWalletNew(
+                                    resObj,
+                                    (err, data1) => {
+                                        if (err) {
+                                            console.log("Err at async.each for reesssssss ::::: ", err)
+                                            cb1(err)
+                                        } else {
+                                            resultComesFromCreditCall.push(data1)
+                                            console.log("<><resultComesFromCreditCall><>", resultComesFromCreditCall)
+
+                                            cb1(null, data1)
+                                        }
+                                    }
+                                )
+                            },
+                            (err) => {
+                                if (err) {
+                                    // console.error("async.each RESULT call ::::: error iss ::::: ", err);
+                                    cb1(err)
+                                } else {
+                                    console.log("$$$$$$$$$$$$", resultComesFromCreditCall)
+                                    callback(null, resultComesFromCreditCall)
+                                }
+                            }
+                        )
+
                         // console.log("2nd waterfalllllllllll ", resultForCreditCall)
-                        callback(null, resultForCreditCall)
+                        // callback(null, resultForCreditCall)
                     }
                 ],
                 function(err, finalData) {
-                    // console.log("FINAL ::::: -> ", finalData)
+                    console.log("FINAL ::::: -> ", finalData)
                     // SessionModel.removeResultInProcess(reqData.marketId)
                     res.callback(err, finalData)
                 }
