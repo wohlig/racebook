@@ -966,13 +966,21 @@ export default {
                     )
 
                     // callback(null, obj)
+                    console.log("USERRRRRRRRRRRRR ::::: ", {
+                        // url: obj.url + "AR/createAccountStatement",
+                        url: obj.url + "Racebook/createAccountStatement",
+                        // url:
+                        //     "http://localhost:1339/Api/Racebook/createAccountStatement",
+                        body: obj,
+                        json: true
+                    })
 
                     request.post(
                         {
                             // url: obj.url + "AR/createAccountStatement",
-                            // url: obj.url + "Racebook/createAccountStatement",
-                            url:
-                                "http://localhost:1339/Api/Racebook/createAccountStatement",
+                            url: obj.url + "Racebook/createAccountStatement",
+                            // url:
+                            //     "http://localhost:1339/Api/Racebook/createAccountStatement",
                             body: obj,
                             json: true
                         },
