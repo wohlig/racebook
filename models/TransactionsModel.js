@@ -227,6 +227,8 @@ export default {
                                         data.transaction.timeOfBetConvert = new Date(data.transaction.timeOfBet)
                                         data.transaction.timeOfRaceConvert = new Date(data.transaction.timeOfRace)
                                         data.transaction.id = "D"+data.transaction.id
+                                        data.transaction.runnerName = data.transaction.runnerName ? data.transaction.runnerName : ""
+                                        data.transaction.meetingName = data.transaction.meetingName ? data.transaction.meetingName : ""
 
                                         // keys required outside transaction object
                                         data.timeOfBetConvert = new Date(data.transaction.timeOfBet)
@@ -239,6 +241,8 @@ export default {
                                         data.amount = data.transaction.amount ? data.transaction.amount : ""
                                         data.odds = data.transaction.odds ? data.transaction.odds : ""
                                         data.bettype = data.transaction.bettype ? data.transaction.bettype : ""
+                                        data.runnerName = data.transaction.runnerName ? data.transaction.runnerName : ""
+                                        data.meetingName = data.transaction.meetingName ? data.transaction.meetingName : ""
                                     }
                                     data.resultDeclare = false
 
@@ -466,18 +470,20 @@ export default {
 
                         //
                         data.transaction.refId = refIdKey
-                        data.transaction.amount = data.transaction.amount ? data.transaction.amount : 0,
-                        data.transaction.odds = data.transaction.odds ? data.transaction.odds : 0,
-                        data.transaction.bettype = data.transaction.bettype ? data.transaction.bettype : "",
-                        data.transaction.timeOfBet = data.transaction.timeOfBet,
-                        data.transaction.timeOfRace = data.transaction.timeOfRace,
-                        data.transaction.runnerName = data.transaction.runnerName ? data.transaction.runnerName : "",
-                        data.transaction.meetingName = data.transaction.meetingName ? data.transaction.meetingName : "",
-                        data.transaction.meetingId = data.transaction.meetingId ? data.transaction.meetingId : "",
-                        data.transaction.eventNo = data.transaction.eventNo ? data.transaction.eventNo : "",
-                        data.transaction.runnerNo = data.transaction.runnerNo ? data.transaction.runnerNo : "",
-                        data.transaction.timeOfBetConvert = new Date(data.transaction.timeOfBet),
+                        data.transaction.amount = data.transaction.amount ? data.transaction.amount : 0
+                        data.transaction.odds = data.transaction.odds ? data.transaction.odds : 0
+                        data.transaction.bettype = data.transaction.bettype ? data.transaction.bettype : ""
+                        data.transaction.timeOfBet = data.transaction.timeOfBet
+                        data.transaction.timeOfRace = data.transaction.timeOfRace
+                        data.transaction.runnerName = data.transaction.runnerName ? data.transaction.runnerName : ""
+                        data.transaction.meetingName = data.transaction.meetingName ? data.transaction.meetingName : ""
+                        data.transaction.meetingId = data.transaction.meetingId ? data.transaction.meetingId : ""
+                        data.transaction.eventNo = data.transaction.eventNo ? data.transaction.eventNo : ""
+                        data.transaction.runnerNo = data.transaction.runnerNo ? data.transaction.runnerNo : ""
+                        data.transaction.timeOfBetConvert = new Date(data.transaction.timeOfBet)
                         data.transaction.timeOfRaceConvert = new Date(data.transaction.timeOfRace)
+                        data.transaction.runnerName = data.transaction.runnerName ? data.transaction.runnerName : ""
+                        data.transaction.meetingName = data.transaction.meetingName ? data.transaction.meetingName : ""
 
                         // keys required outside transaction object
                         data.timeOfBetConvert = new Date(data.transaction.timeOfBet)
@@ -490,6 +496,8 @@ export default {
                         data.amount = data.transaction.amount ? data.transaction.amount : ""
                         data.odds = data.transaction.odds ? data.transaction.odds : ""
                         data.bettype = data.transaction.bettype ? data.transaction.bettype : ""
+                        data.runnerName = data.transaction.runnerName ? data.transaction.runnerName : ""
+                        data.meetingName = data.transaction.meetingName ? data.transaction.meetingName : ""
                     }                    
                     
 
@@ -771,6 +779,8 @@ export default {
                         item.marketId = item.meetingId
                         // item.horse = item.runnerNo
                         // item.event = item.eventNo
+                        item.runnerNo = item.runnerNo
+                        item.eventNo = item.eventNo
                         item.horse = item.runnerName
                         item.event = item.meetingName
                         item.marketName = item.meetingId
@@ -882,6 +892,8 @@ export default {
                         data.transaction.runnerNo = data.transaction.runnerNo ? data.transaction.runnerNo : "",
                         data.transaction.timeOfBetConvert = new Date(data.transaction.timeOfBet),
                         data.transaction.timeOfRaceConvert = new Date(data.transaction.timeOfRace)
+                        data.transaction.runnerName = data.transaction.runnerName ? data.transaction.runnerName : ""
+                        data.transaction.meetingName = data.transaction.meetingName ? data.transaction.meetingName : ""
 
                         // keys required outside transaction object
                         data.timeOfBetConvert = new Date(data.transaction.timeOfBet)
@@ -894,6 +906,9 @@ export default {
                         data.amount = data.transaction.amount ? data.transaction.amount : ""
                         data.odds = data.transaction.odds ? data.transaction.odds : ""
                         data.bettype = data.transaction.bettype ? data.transaction.bettype : ""
+                        data.runnerName = data.transaction.runnerName ? data.transaction.runnerName : ""
+                        data.meetingName = data.transaction.meetingName ? data.transaction.meetingName : ""
+                        
                     }
                     data.resultDeclare = true
                     console.log("data afterrrrrrr  ::::: ", data)

@@ -63,6 +63,12 @@ var schema = new Schema({
         },
 
     },
+    runnerName: {
+        type: String
+    },
+    meetingName: {
+        type: String
+    },
     timeOfBetConvert: { //
         type: Date
     },
