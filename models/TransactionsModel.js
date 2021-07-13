@@ -498,6 +498,8 @@ export default {
                         data.bettype = data.transaction.bettype ? data.transaction.bettype : ""
                         data.runnerName = data.transaction.runnerName ? data.transaction.runnerName : ""
                         data.meetingName = data.transaction.meetingName ? data.transaction.meetingName : ""
+
+                        data.winnerAggregatedData = data.winnerAggregatedData ? data.winnerAggregatedData : {} 
                     }                    
                     
 
@@ -655,29 +657,34 @@ export default {
         gets bets data from timeOfRaceConvert key (means at race start)
     */
     getBetsForResult: async () => {
-        // var a15minAgo = new Date( Date.now() - 15000 * 60 );
+        var a30minAgo = new Date( Date.now() - 30000 * 60 );
         // var travelTime = moment().subtract(15, 'minutes').format('hh:mm A');
 
         // let startDate = moment().subtract(1, "days").startOf("day");
         // let endDate = moment().endOf("day");
-        let query = {
-            // isResult : true,
+        let query1 = {
+            resultDeclare : false,
             type: "debit",
             timeOfRaceConvert: {
-                // $gte: new Date(startDate),
-                // $lte: new Date(endDate),
-                // '$gte': new Date("2021-06-01T18:30:00.000Z"),
-                // '$lte': new Date("2021-06-02T18:29:59.999Z") 
-                '$gte': new Date("2021-07-11T18:30:00.000Z"),
-                '$lte': new Date("2021-07-12T18:29:59.999Z") 
+                $gte: new Date(a30minAgo),
+                $lte: new Date(),
             },
         }
+
+        let query2 = {
+            resultDeclare : false,
+            type: "debit",
+            timeOfRaceConvert: {
+                '$gte': new Date("2021-07-12T18:30:00.000Z"),
+                '$lte': new Date("2021-07-13T18:29:59.999Z") 
+            },
+        }
+        console.log("query1 ::::: ", query1)
+        console.log("query2 ::::: ", query2)
         
         let betsReturn = await Transactions
-        .find(query)
+        .find(query2)
         .select("transaction meetingId runnerNo eventNo timeOfRaceConvert timeOfBetConvert id refId amount odds bettype potentialWin potentialLose userId sid currency type url")
-        .lean()
-        .exec()
 
         /* // let betsReturn = await Transactions.distinct('meetingId');
         let betsReturn = await Transactions.aggregate( 
@@ -909,6 +916,7 @@ export default {
                         data.runnerName = data.transaction.runnerName ? data.transaction.runnerName : ""
                         data.meetingName = data.transaction.meetingName ? data.transaction.meetingName : ""
                         
+                        data.winnerAggregatedData = data.winnerAggregatedData ? data.winnerAggregatedData : {} 
                     }
                     data.resultDeclare = true
                     console.log("data afterrrrrrr  ::::: ", data)
