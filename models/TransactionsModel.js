@@ -565,7 +565,7 @@ export default {
                         // gameId: data.game.id,
                         win: data.transaction.amount,
                         lose: netexposureSum.amount * -1,
-                        // subGame: data.game.type,
+                        subGame: data.transaction.meetingName,
                         net: 0,
                         url: data.url,
                         _id: data.userId,
