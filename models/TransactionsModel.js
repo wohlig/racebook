@@ -683,7 +683,7 @@ export default {
         console.log("query2 ::::: ", query2)
         
         let betsReturn = await Transactions
-        .find(query1)
+        .find(query2)
         .select("transaction meetingId runnerNo eventNo timeOfRaceConvert timeOfBetConvert id refId amount odds bettype potentialWin potentialLose userId sid currency type url")
 
         /* // let betsReturn = await Transactions.distinct('meetingId');
@@ -702,6 +702,8 @@ export default {
                 }
             ]
         ); */
+
+        console.log("betsReturn ::::: ", betsReturn)
 
         return betsReturn
     },
@@ -874,110 +876,104 @@ export default {
                             }
                             console.log("mainCreditObject ::::: ", mainCreditObject)
 
-                            // callback(null, data)
                             callback(null, mainCreditObject)
 
                         } else {
-                            console.log("elseee 111")
-                            callback("Result not declare at 3rd party side")
+                            console.log("@@@@@@@@@@@@@@@@@@ Result not declare at 3rd party side @@@@@@@@@@@@@@@@@@")
+                            callback("Result not declare at 3rd party side", {})
                         }
                     }
 
                 },
                 (creditObj, callback) => {
                     console.log("creditObj ::::: ", creditObj)
+                    console.log("data beforeeeeeee ::::: ", data)
+                    // rate = data.rate
+                    // data.subGame = data.game.type
+                    // data.rate = data.rate
+                    data.type = "credit"
                     
-                    if (creditObj && creditObj.sid) {
-                        console.log("data beforeeeeeee ::::: ", data)
-                        // rate = data.rate
-                        // data.subGame = data.game.type
-                        // data.rate = data.rate
-                        data.type = "credit"
+                    if (data.transaction && data.transaction.id) {
+                        data.transaction.id = "C"+ data.transaction.id.slice(1);
+                        data.id = data.transaction.id
+
+                        //
+                        data.transaction.refId = refIdKey
+                        data.transaction.amount = data.transaction.amount ? data.transaction.amount : 0,
+                        data.transaction.odds = data.transaction.odds ? data.transaction.odds : 0,
+                        data.transaction.bettype = data.transaction.bettype ? data.transaction.bettype : "",
+                        data.transaction.timeOfBet = data.transaction.timeOfBet,
+                        data.transaction.timeOfRace = data.transaction.timeOfRace,
+                        data.transaction.runnerName = data.transaction.runnerName ? data.transaction.runnerName : "",
+                        data.transaction.meetingName = data.transaction.meetingName ? data.transaction.meetingName : "",
+                        data.transaction.meetingId = data.transaction.meetingId ? data.transaction.meetingId : "",
+                        data.transaction.eventNo = data.transaction.eventNo ? data.transaction.eventNo : "",
+                        data.transaction.runnerNo = data.transaction.runnerNo ? data.transaction.runnerNo : "",
+                        data.transaction.timeOfBetConvert = new Date(data.transaction.timeOfBet),
+                        data.transaction.timeOfRaceConvert = new Date(data.transaction.timeOfRace)
+                        data.transaction.runnerName = data.transaction.runnerName ? data.transaction.runnerName : ""
+                        data.transaction.meetingName = data.transaction.meetingName ? data.transaction.meetingName : ""
+
+                        // keys required outside transaction object
+                        data.timeOfBetConvert = new Date(data.transaction.timeOfBet)
+                        data.timeOfRaceConvert = new Date(data.transaction.timeOfRace)
+                        data.eventNo = data.transaction.eventNo ? data.transaction.eventNo : ""
+                        data.runnerNo = data.transaction.runnerNo ? data.transaction.runnerNo : ""
+                        data.meetingId = data.transaction.meetingId ? data.transaction.meetingId : ""
+                        data.id = data.transaction.id
+                        data.refId = refIdKey ? refIdKey : ""
+                        data.amount = data.transaction.amount ? data.transaction.amount : ""
+                        data.odds = data.transaction.odds ? data.transaction.odds : ""
+                        data.bettype = data.transaction.bettype ? data.transaction.bettype : ""
+                        data.runnerName = data.transaction.runnerName ? data.transaction.runnerName : ""
+                        data.meetingName = data.transaction.meetingName ? data.transaction.meetingName : ""
                         
-                        if (data.transaction && data.transaction.id) {
-                            data.transaction.id = "C"+ data.transaction.id.slice(1);
-                            data.id = data.transaction.id
-
-                            //
-                            data.transaction.refId = refIdKey
-                            data.transaction.amount = data.transaction.amount ? data.transaction.amount : 0,
-                            data.transaction.odds = data.transaction.odds ? data.transaction.odds : 0,
-                            data.transaction.bettype = data.transaction.bettype ? data.transaction.bettype : "",
-                            data.transaction.timeOfBet = data.transaction.timeOfBet,
-                            data.transaction.timeOfRace = data.transaction.timeOfRace,
-                            data.transaction.runnerName = data.transaction.runnerName ? data.transaction.runnerName : "",
-                            data.transaction.meetingName = data.transaction.meetingName ? data.transaction.meetingName : "",
-                            data.transaction.meetingId = data.transaction.meetingId ? data.transaction.meetingId : "",
-                            data.transaction.eventNo = data.transaction.eventNo ? data.transaction.eventNo : "",
-                            data.transaction.runnerNo = data.transaction.runnerNo ? data.transaction.runnerNo : "",
-                            data.transaction.timeOfBetConvert = new Date(data.transaction.timeOfBet),
-                            data.transaction.timeOfRaceConvert = new Date(data.transaction.timeOfRace)
-                            data.transaction.runnerName = data.transaction.runnerName ? data.transaction.runnerName : ""
-                            data.transaction.meetingName = data.transaction.meetingName ? data.transaction.meetingName : ""
-
-                            // keys required outside transaction object
-                            data.timeOfBetConvert = new Date(data.transaction.timeOfBet)
-                            data.timeOfRaceConvert = new Date(data.transaction.timeOfRace)
-                            data.eventNo = data.transaction.eventNo ? data.transaction.eventNo : ""
-                            data.runnerNo = data.transaction.runnerNo ? data.transaction.runnerNo : ""
-                            data.meetingId = data.transaction.meetingId ? data.transaction.meetingId : ""
-                            data.id = data.transaction.id
-                            data.refId = refIdKey ? refIdKey : ""
-                            data.amount = data.transaction.amount ? data.transaction.amount : ""
-                            data.odds = data.transaction.odds ? data.transaction.odds : ""
-                            data.bettype = data.transaction.bettype ? data.transaction.bettype : ""
-                            data.runnerName = data.transaction.runnerName ? data.transaction.runnerName : ""
-                            data.meetingName = data.transaction.meetingName ? data.transaction.meetingName : ""
-                            
-                            // data.winnerAggregateddata = data.winnerAggregateddata ? data.winnerAggregateddata : {} 
-                        }
-                        data.resultDeclare = true
-                        console.log("data afterrrrrrr  ::::: 111 ", data)
-                        delete data._id
-                        console.log("data afterrrrrrr  ::::: 222 ", data)
-
-                        var creditTransaction = new Transactions(data)
-                        console.log("creditTransaction ::::: ", creditTransaction)
-
-                        creditTransaction.save((err, savedData1) => {
-                            console.log(
-                                "creditWallet ::::: 4 waterfall ::::: ",
-                                savedData1
-                            )
-                            if (err) {
-                                var responseData = {}
-                                responseData.status = "UNKNOWN_ERROR"
-                                callback(err, responseData)
-                            } else {
-                                
-                                console.log("Update Debit Documents ::::: ", {
-                                    type: "debit",
-                                    refId: refIdKey 
-                                })
-                                Transactions.update(
-                                    {
-                                        type: "debit",
-                                        refId: refIdKey
-                                    }, 
-                                    {
-                                        resultDeclare : true
-                                    }, 
-                                    (err, resData) => {
-                                        console.log("RESULT UPDATE AT DEBIT CALL ::::: ", null, resData)
-                                        if (err) {
-                                            console.log("error in updating result key from debit entry ")
-                                            callback(err, responseData)
-                                        } else {
-                                            console.log("result key updated successfully ")
-                                            callback(null, "saved")
-                                        }
-                                    }
-                                )
-                            }
-                        })
-                    } else {
-                        callback(err, "No Result From 3rd party")
+                        // data.winnerAggregateddata = data.winnerAggregateddata ? data.winnerAggregateddata : {} 
                     }
+                    data.resultDeclare = true
+                    console.log("data afterrrrrrr  ::::: 111 ", data)
+                    delete data._id
+                    console.log("data afterrrrrrr  ::::: 222 ", data)
+
+                    var creditTransaction = new Transactions(data)
+                    console.log("creditTransaction ::::: ", creditTransaction)
+
+                    creditTransaction.save((err, savedData1) => {
+                        console.log(
+                            "creditWallet ::::: 4 waterfall ::::: ",
+                            savedData1
+                        )
+                        if (err) {
+                            var responseData = {}
+                            responseData.status = "UNKNOWN_ERROR"
+                            callback(err, responseData)
+                        } else {
+                            
+                            console.log("Update Debit Documents ::::: ", {
+                                type: "debit",
+                                refId: refIdKey 
+                            })
+                            Transactions.update(
+                                {
+                                    type: "debit",
+                                    refId: refIdKey
+                                }, 
+                                {
+                                    resultDeclare : true
+                                }, 
+                                (err, resData) => {
+                                    console.log("RESULT UPDATE AT DEBIT CALL ::::: ", null, resData)
+                                    if (err) {
+                                        console.log("error in updating result key from debit entry ")
+                                        callback(err, responseData)
+                                    } else {
+                                        console.log("result key updated successfully ")
+                                        callback(null, "saved")
+                                    }
+                                }
+                            )
+                        }
+                    })
                 },
                 (transactionData, callback) => {
                     console.log("NET EXPOOOOOOOO CALL ::::: ", data)
