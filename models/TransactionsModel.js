@@ -847,12 +847,16 @@ export default {
                     data.url = newData.url
 
                     if (data && data.runnerNo) {
-                        if (data.runnerNo === data.winnerAggregatedData.winnerHorse) {
-                            console.log("winnnnnnnnnnnerrrrrrrr")
-                            amount = data.potentialWin
+                        if (data.winnerAggregatedData && data.winnerAggregatedData.winnerHorse) {
+                            if (data.runnerNo === data.winnerAggregatedData.winnerHorse) {
+                                console.log("winnnnnnnnnnnerrrrrrrr")
+                                amount = data.potentialWin
+                            } else {
+                                console.log("looserrrrrrrrrrrrrrrrr")
+                                amount = data.potentialLose
+                            }
                         } else {
-                            console.log("looserrrrrrrrrrrrrrrrr")
-                            amount = data.potentialLose
+                            amount = data.amount
                         }
                         console.log("aaaaaaaaaaaa", amount)
 
