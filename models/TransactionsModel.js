@@ -684,6 +684,7 @@ export default {
         
         let betsReturn = await Transactions
         .find(query2)
+        .lean()
         .select("transaction meetingId runnerNo eventNo timeOfRaceConvert timeOfBetConvert id refId amount odds bettype potentialWin potentialLose userId sid currency type url")
 
         /* // let betsReturn = await Transactions.distinct('meetingId');
@@ -829,8 +830,9 @@ export default {
         credit wallet meetingId wise 
     */
     creditWalletNew: (data, callback) => {
-        console.log("creditWallet ::::: data ::::: ", data)
-
+        console.log("creditWallet ::::: data ::::: 111", data)
+        delete data._id
+        
         var rate
         var mainCreditObject = {}
         var amount
@@ -932,8 +934,6 @@ export default {
                     }
                     data.resultDeclare = true
                     console.log("data afterrrrrrr  ::::: 111 ", data)
-                    delete data._id
-                    console.log("data afterrrrrrr  ::::: 222 ", data)
 
                     var creditTransaction = new Transactions(data)
                     console.log("creditTransaction ::::: ", creditTransaction)
