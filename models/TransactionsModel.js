@@ -861,7 +861,8 @@ export default {
                                 amount = data.potentialWin
                             } else {
                                 console.log("looserrrrrrrrrrrrrrrrr")
-                                amount = data.potentialLose
+                                // amount = data.potentialLose
+                                amount = 0
                             }
 
                             console.log("aaaaaaaaaaaa", amount)
@@ -1039,6 +1040,8 @@ export default {
                                 )
                             }
                             
+                            console.log("AMTTTTTT winLose ::::: ", parseInt(obj.win) - parseInt(obj.lose))
+
                             Transactions.update(
                                 {
                                     "transaction.refId": data.transaction.refId,
@@ -1046,7 +1049,7 @@ export default {
                                 },
                                 {
                                     $set: {
-                                        winLoseAmt: parseInt(obj.win) - obj.lose
+                                        winLoseAmt: parseInt(obj.win) - parseInt(obj.lose)
                                     }
                                 },
                                 {
