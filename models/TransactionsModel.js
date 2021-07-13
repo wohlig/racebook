@@ -499,7 +499,7 @@ export default {
                         data.runnerName = data.transaction.runnerName ? data.transaction.runnerName : ""
                         data.meetingName = data.transaction.meetingName ? data.transaction.meetingName : ""
 
-                        data.winnerAggregatedData = data.winnerAggregatedData ? data.winnerAggregatedData : {} 
+                        // data.winnerAggregatedData = data.winnerAggregatedData ? data.winnerAggregatedData : {} 
                     }                    
                     
 
@@ -920,7 +920,7 @@ export default {
                         data.runnerName = data.transaction.runnerName ? data.transaction.runnerName : ""
                         data.meetingName = data.transaction.meetingName ? data.transaction.meetingName : ""
                         
-                        data.winnerAggregatedData = data.winnerAggregatedData ? data.winnerAggregatedData : {} 
+                        // data.winnerAggregatedData = data.winnerAggregatedData ? data.winnerAggregatedData : {} 
                     }
                     data.resultDeclare = true
                     console.log("data afterrrrrrr  ::::: ", data)
