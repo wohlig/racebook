@@ -847,7 +847,11 @@ export default {
                     data.url = newData.url
 
                     if (data && data.runnerNo) {
+                        console.log("IN IFFFFFFFFF 111",data.winnerAggregatedData)
+
                         if (data.winnerAggregatedData && data.winnerAggregatedData.winnerHorse) {
+                            console.log("IN IFFFFFFFFF 222", data.runnerNo+ "===" +data.winnerAggregatedData.winnerHorse)
+
                             if (data.runnerNo === data.winnerAggregatedData.winnerHorse) {
                                 console.log("winnnnnnnnnnnerrrrrrrr")
                                 amount = data.potentialWin
@@ -874,6 +878,7 @@ export default {
                             callback(null, mainCreditObject)
 
                         } else {
+                            console.log("elseee 111")
                             callback("Result not declare at 3rd party side")
                         }
                     }
@@ -883,57 +888,55 @@ export default {
                     console.log("creditObj ::::: ", creditObj)
                     
                     if (creditObj && creditObj.sid) {
-                        var newData = {}
-                        newData = data
-
-                        console.log("data beforeeeeeee ::::: ", newData)
-                        // rate = newData.rate
-                        // newData.subGame = newData.game.type
-                        // newData.rate = newData.rate
-                        newData.type = "credit"
+                        console.log("data beforeeeeeee ::::: ", data)
+                        // rate = data.rate
+                        // data.subGame = data.game.type
+                        // data.rate = data.rate
+                        data.type = "credit"
                         
-                        if (newData.transaction && newData.transaction.id) {
-                            newData.transaction.id = "C"+ newData.transaction.id.slice(1);
-                            newData.id = newData.transaction.id
+                        if (data.transaction && data.transaction.id) {
+                            data.transaction.id = "C"+ data.transaction.id.slice(1);
+                            data.id = data.transaction.id
 
                             //
-                            newData.transaction.refId = refIdKey
-                            newData.transaction.amount = newData.transaction.amount ? newData.transaction.amount : 0,
-                            newData.transaction.odds = newData.transaction.odds ? newData.transaction.odds : 0,
-                            newData.transaction.bettype = newData.transaction.bettype ? newData.transaction.bettype : "",
-                            newData.transaction.timeOfBet = newData.transaction.timeOfBet,
-                            newData.transaction.timeOfRace = newData.transaction.timeOfRace,
-                            newData.transaction.runnerName = newData.transaction.runnerName ? newData.transaction.runnerName : "",
-                            newData.transaction.meetingName = newData.transaction.meetingName ? newData.transaction.meetingName : "",
-                            newData.transaction.meetingId = newData.transaction.meetingId ? newData.transaction.meetingId : "",
-                            newData.transaction.eventNo = newData.transaction.eventNo ? newData.transaction.eventNo : "",
-                            newData.transaction.runnerNo = newData.transaction.runnerNo ? newData.transaction.runnerNo : "",
-                            newData.transaction.timeOfBetConvert = new Date(newData.transaction.timeOfBet),
-                            newData.transaction.timeOfRaceConvert = new Date(newData.transaction.timeOfRace)
-                            newData.transaction.runnerName = newData.transaction.runnerName ? newData.transaction.runnerName : ""
-                            newData.transaction.meetingName = newData.transaction.meetingName ? newData.transaction.meetingName : ""
+                            data.transaction.refId = refIdKey
+                            data.transaction.amount = data.transaction.amount ? data.transaction.amount : 0,
+                            data.transaction.odds = data.transaction.odds ? data.transaction.odds : 0,
+                            data.transaction.bettype = data.transaction.bettype ? data.transaction.bettype : "",
+                            data.transaction.timeOfBet = data.transaction.timeOfBet,
+                            data.transaction.timeOfRace = data.transaction.timeOfRace,
+                            data.transaction.runnerName = data.transaction.runnerName ? data.transaction.runnerName : "",
+                            data.transaction.meetingName = data.transaction.meetingName ? data.transaction.meetingName : "",
+                            data.transaction.meetingId = data.transaction.meetingId ? data.transaction.meetingId : "",
+                            data.transaction.eventNo = data.transaction.eventNo ? data.transaction.eventNo : "",
+                            data.transaction.runnerNo = data.transaction.runnerNo ? data.transaction.runnerNo : "",
+                            data.transaction.timeOfBetConvert = new Date(data.transaction.timeOfBet),
+                            data.transaction.timeOfRaceConvert = new Date(data.transaction.timeOfRace)
+                            data.transaction.runnerName = data.transaction.runnerName ? data.transaction.runnerName : ""
+                            data.transaction.meetingName = data.transaction.meetingName ? data.transaction.meetingName : ""
 
                             // keys required outside transaction object
-                            newData.timeOfBetConvert = new Date(newData.transaction.timeOfBet)
-                            newData.timeOfRaceConvert = new Date(newData.transaction.timeOfRace)
-                            newData.eventNo = newData.transaction.eventNo ? newData.transaction.eventNo : ""
-                            newData.runnerNo = newData.transaction.runnerNo ? newData.transaction.runnerNo : ""
-                            newData.meetingId = newData.transaction.meetingId ? newData.transaction.meetingId : ""
-                            newData.id = newData.transaction.id
-                            newData.refId = refIdKey ? refIdKey : ""
-                            newData.amount = newData.transaction.amount ? newData.transaction.amount : ""
-                            newData.odds = newData.transaction.odds ? newData.transaction.odds : ""
-                            newData.bettype = newData.transaction.bettype ? newData.transaction.bettype : ""
-                            newData.runnerName = newData.transaction.runnerName ? newData.transaction.runnerName : ""
-                            newData.meetingName = newData.transaction.meetingName ? newData.transaction.meetingName : ""
+                            data.timeOfBetConvert = new Date(data.transaction.timeOfBet)
+                            data.timeOfRaceConvert = new Date(data.transaction.timeOfRace)
+                            data.eventNo = data.transaction.eventNo ? data.transaction.eventNo : ""
+                            data.runnerNo = data.transaction.runnerNo ? data.transaction.runnerNo : ""
+                            data.meetingId = data.transaction.meetingId ? data.transaction.meetingId : ""
+                            data.id = data.transaction.id
+                            data.refId = refIdKey ? refIdKey : ""
+                            data.amount = data.transaction.amount ? data.transaction.amount : ""
+                            data.odds = data.transaction.odds ? data.transaction.odds : ""
+                            data.bettype = data.transaction.bettype ? data.transaction.bettype : ""
+                            data.runnerName = data.transaction.runnerName ? data.transaction.runnerName : ""
+                            data.meetingName = data.transaction.meetingName ? data.transaction.meetingName : ""
                             
-                            // newData.winnerAggregatednewData = newData.winnerAggregatednewData ? newData.winnerAggregatednewData : {} 
+                            // data.winnerAggregateddata = data.winnerAggregateddata ? data.winnerAggregateddata : {} 
                         }
-                        newData.resultDeclare = true
-                        console.log("newData afterrrrrrr  ::::: ", newData)
-                        delete newData._id
+                        data.resultDeclare = true
+                        console.log("data afterrrrrrr  ::::: 111 ", data)
+                        delete data._id
+                        console.log("data afterrrrrrr  ::::: 222 ", data)
 
-                        var creditTransaction = new Transactions(newData)
+                        var creditTransaction = new Transactions(data)
                         console.log("creditTransaction ::::: ", creditTransaction)
 
                         creditTransaction.save((err, savedData1) => {
