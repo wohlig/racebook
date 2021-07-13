@@ -499,7 +499,7 @@ export default {
                         data.runnerName = data.transaction.runnerName ? data.transaction.runnerName : ""
                         data.meetingName = data.transaction.meetingName ? data.transaction.meetingName : ""
 
-                        // data.winnerAggregatedData = data.winnerAggregatedData ? data.winnerAggregatedData : {} 
+                        data.winnerAggregatedData = data.winnerAggregatedData ? data.winnerAggregatedData : {} 
                     }                    
                     
 
@@ -671,19 +671,19 @@ export default {
             },
         }
 
-        let query2 = {
-            resultDeclare : false,
-            type: "debit",
-            timeOfRaceConvert: {
-                '$gte': new Date("2021-07-12T18:30:00.000Z"),
-                '$lte': new Date("2021-07-13T18:29:59.999Z") 
-            },
-        }
+        // let query2 = {
+        //     resultDeclare : false,
+        //     type: "debit",
+        //     timeOfRaceConvert: {
+        //         '$gte': new Date("2021-07-12T18:30:00.000Z"),
+        //         '$lte': new Date("2021-07-13T18:29:59.999Z") 
+        //     },
+        // }
         console.log("query1 ::::: ", query1)
-        console.log("query2 ::::: ", query2)
+        // console.log("query2 ::::: ", query2)
         
         let betsReturn = await Transactions
-        .find(query2)
+        .find(query1)
         .lean()
         .select("transaction meetingId runnerNo eventNo timeOfRaceConvert timeOfBetConvert id refId amount odds bettype potentialWin potentialLose userId sid currency type url")
 
@@ -832,7 +832,7 @@ export default {
     creditWalletNew: (data, callback) => {
         console.log("creditWallet ::::: data ::::: 111", data)
         delete data._id
-        
+
         var rate
         var mainCreditObject = {}
         var amount
@@ -930,7 +930,7 @@ export default {
                         data.runnerName = data.transaction.runnerName ? data.transaction.runnerName : ""
                         data.meetingName = data.transaction.meetingName ? data.transaction.meetingName : ""
                         
-                        // data.winnerAggregateddata = data.winnerAggregateddata ? data.winnerAggregateddata : {} 
+                        data.winnerAggregateddata = data.winnerAggregateddata ? data.winnerAggregateddata : {} 
                     }
                     data.resultDeclare = true
                     console.log("data afterrrrrrr  ::::: 111 ", data)

@@ -109,9 +109,9 @@ var schema = new Schema({
         type: Boolean
     },
     type: String, // [debit or credit],
-    // winnerAggregatedData: { // to save winner at result call 
-    //     type: Object
-    // },
+    winnerAggregatedData: { // to save winner at result call 
+        type: Object
+    },
     createdAt: { //
         type: Date,
         default: Date.now

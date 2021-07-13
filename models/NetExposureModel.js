@@ -14,7 +14,7 @@ export default {
                 status: "pending",
                 url: data.url,
                 createdAt: {
-                    $gte: moment().subtract(10, "minutes").toDate()
+                    $gte: moment().subtract(30, "minutes").toDate()
                 }
             }
             console.log("GetNetExpoByuser ::::: query ::::: ", query)
@@ -76,9 +76,9 @@ export default {
                 userId: ObjectId(data.userId),
                 status: "pending",
                 url: data.url,
-                // createdAt: {
-                //     $gte: moment().subtract(10, "minutes").toDate()
-                // }
+                createdAt: {
+                    $gte: moment().subtract(30, "minutes").toDate()
+                }
             }
             if (data.transaction && data.transaction.refId) {
                 query.refId = data.transaction.refId
