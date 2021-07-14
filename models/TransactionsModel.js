@@ -195,7 +195,8 @@ export default {
 
                                     data.type = "debit"
                                     if(data && data.game) {
-                                        data.subGame = data.game.type ? data.game.type : "racebook"
+                                        // data.subGame = data.game.type ? data.game.type : "racebook"
+                                        data.subGame = data.transaction.meetingName ? data.transaction.meetingName : ""
                                     }
                                     data.rate = rate
 
@@ -462,7 +463,8 @@ export default {
                     data.type = "credit"
 
                     if (data && data.game) { 
-                        data.subGame = data.game.type ? data.game.type : "racebook"
+                        // data.subGame = data.game.type ? data.game.type : "racebook"
+                        data.subGame = data.transaction.meetingName ? data.transaction.meetingName : ""
                     }
                     if(data && data.transaction && data.transaction.timeOfBet && data.transaction.timeOfRace) {
                         data.id = data.transaction.id
@@ -565,7 +567,7 @@ export default {
                         // gameId: data.game.id,
                         win: data.transaction.amount,
                         lose: netexposureSum.amount * -1,
-                        subGame: data.transaction.meetingName,
+                        subGame: data.transaction.meetingName, //
                         net: 0,
                         url: data.url,
                         _id: data.userId,
@@ -671,14 +673,14 @@ export default {
             },
         }
 
-        // let query2 = {
-        //     resultDeclare : false,
-        //     type: "debit",
-        //     timeOfRaceConvert: {
-        //         '$gte': new Date("2021-07-12T18:30:00.000Z"),
-        //         '$lte': new Date("2021-07-13T18:29:59.999Z") 
-        //     },
-        // }
+        let query2 = {
+            resultDeclare : false,
+            type: "debit",
+            timeOfRaceConvert: {
+                '$gte': new Date("2021-07-13T18:30:00.000Z"),
+                '$lte': new Date("2021-07-14T18:29:59.999Z") 
+            },
+        }
         console.log("query1 ::::: ", query1)
         // console.log("query2 ::::: ", query2)
         
@@ -892,7 +894,7 @@ export default {
                     console.log("creditObj ::::: ", creditObj)
                     console.log("data beforeeeeeee ::::: ", data)
                     // rate = data.rate
-                    // data.subGame = data.game.type
+                    // data.subGame = data.transaction.meetingName ? data.transaction.meetingName : "",
                     // data.rate = data.rate
                     data.type = "credit"
                     
@@ -994,7 +996,7 @@ export default {
                         // gameId: data.game.id,
                         win: amount,
                         lose: netexposureSum.amount * -1,
-                        // subGame: data.game.type, // 
+                        subGame: data.transaction.meetingName, // 
                         net: 0,
                         url: data.url, // 
                         _id: data.userId, // 
