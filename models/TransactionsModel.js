@@ -983,7 +983,8 @@ export default {
                 (netexposureSum, callback) => {
                     console.log(
                         "creditWallet ::::: 5 waterfall ::::: ",
-                        netexposureSum
+                        netexposureSum,
+                        amount
                     )
  
                     var winAmount, loseAmount, newAmount
